@@ -4,6 +4,10 @@ project(STU_LBX_Library C)
 set(CMAKE_C_STANDARD 90)
 
 set(LIBLBX_SOURCES
+        LibLBX/lbx.h
+        LibLBX/lbx_defs.h
+        LibLBX/lbx_meta.h
+        LibLBX/lbx_types.h
         LibLBX/lib_lbx.c
         LibLBX/lib_lbx.h
         LibLBX/lib_lbx_display.c
@@ -16,6 +20,7 @@ set(LIBLBX_SOURCES
         LibLBX/lib_lbx_record_type.h
         LibLBX/lib_lbx_record_subrecord.c
         LibLBX/lib_lbx_record_subrecord.h
+        LibLBX/lib_lbx_types.h
         LibLBX/lib_lbx_util.c
         LibLBX/lib_lbx_util.h)
 

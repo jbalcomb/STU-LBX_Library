@@ -124,7 +124,7 @@ int get_record_type(LBX_DATA * lbx, int entry_number)
      */
     if (have_record_type != 1)
     {
-        if (strcmp(lbx->meta->file_name, "FONTS.LBX") == 0)
+        if (strcmp(lbx->meta->meta_file_name, "FONTS.LBX") == 0)
         {
             if (entry_number < 2)
             {

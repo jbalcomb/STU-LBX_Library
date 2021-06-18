@@ -131,10 +131,10 @@ void display_lbx_file_meta_data(LBX_DATA * lbx)
     /*
      * File Names
      */
-    printf("||%-20s|%-43s||\n", "File Path", lbx->meta->file_path);
-    printf("||%-20s|%-43s||\n", "Directory Path", lbx->meta->directory_path);
-    printf("||%-20s|%-43s||\n", "File Name", lbx->meta->file_name);
-    printf("||%-20s|%-43s||\n", "File Name Base", lbx->meta->file_name_base);
+    printf("||%-20s|%-43s||\n", "File Path", lbx->meta->meta_file_path);
+    printf("||%-20s|%-43s||\n", "Directory Path", lbx->meta->meta_directory_path);
+    printf("||%-20s|%-43s||\n", "File Name", lbx->meta->meta_file_name);
+    printf("||%-20s|%-43s||\n", "File Name Base", lbx->meta->meta_file_name_base);
     /*
      * File Size
      */
@@ -229,7 +229,7 @@ void display_lbx_record_meta_data(LBX_DATA * lbx)
 
     for (itr_entry_count = 0; itr_entry_count < tmp_entry_count; itr_entry_count++)
     {
-        if (lbx->meta->records->entry[itr_entry_count].type == LBX_RECORD_TYPE_IMAGES)
+        if (lbx->meta->records->entry[itr_entry_count].meta_type == LBX_RECORD_TYPE_IMAGES)
         {
             strcpy(sub_record_attributes, "Height, Width");
         }

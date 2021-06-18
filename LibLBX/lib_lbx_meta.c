@@ -270,14 +270,14 @@ void populate_lbx_info_meta_data(LBX_DATA * lbx)
 
     for (itr_entry_index = 0; itr_entry_index < entry_count; itr_entry_index++) {
         record_size = get_record_size(lbx, itr_entry_index);
-        if (lbx->meta->records->entry[itr_entry_index].size != 0)
+        if (lbx->meta->records->entry[itr_entry_index].meta_size != 0)
         {
-            record_size_accumulator = record_size_accumulator + lbx->meta->records->entry[itr_entry_index].size;
-            if (lbx->meta->records->entry[itr_entry_index].size < record_size_minimum) {
-                record_size_minimum = lbx->meta->records->entry[itr_entry_index].size;
+            record_size_accumulator = record_size_accumulator + lbx->meta->records->entry[itr_entry_index].meta_size;
+            if (lbx->meta->records->entry[itr_entry_index].meta_size < record_size_minimum) {
+                record_size_minimum = lbx->meta->records->entry[itr_entry_index].meta_size;
             }
-            if (lbx->meta->records->entry[itr_entry_index].size > record_size_maximum) {
-                record_size_maximum = lbx->meta->records->entry[itr_entry_index].size;
+            if (lbx->meta->records->entry[itr_entry_index].meta_size > record_size_maximum) {
+                record_size_maximum = lbx->meta->records->entry[itr_entry_index].meta_size;
             }
         }
         else
@@ -338,10 +338,10 @@ void populate_lbx_record_meta_data(LBX_DATA * lbx)
         /*
          * Record Entry Number
          */
-        lbx->meta->records->entry[itr_entry_index].entry_number = itr_entry_index;
-        int tmp_len_entry_number_string = snprintf( NULL, 0, "%d", lbx->meta->records->entry[itr_entry_index].entry_number);
+        lbx->meta->records->entry[itr_entry_index].meta_entry_number = itr_entry_index;
+        int tmp_len_entry_number_string = snprintf( NULL, 0, "%d", lbx->meta->records->entry[itr_entry_index].meta_entry_number);
         lbx->meta->records->entry[itr_entry_index].entry_number_string = malloc(tmp_len_entry_number_string + 1);
-        snprintf(lbx->meta->records->entry[itr_entry_index].entry_number_string, tmp_len_entry_number_string + 1, "%d", lbx->meta->records->entry[itr_entry_index].entry_number);
+        snprintf(lbx->meta->records->entry[itr_entry_index].entry_number_string, tmp_len_entry_number_string + 1, "%d", lbx->meta->records->entry[itr_entry_index].meta_entry_number);
 
         /*
          * Record Entry Name
@@ -364,27 +364,27 @@ void populate_lbx_record_meta_data(LBX_DATA * lbx)
         /*
          * Record Type, Record Type Description
          */
-        lbx->meta->records->entry[itr_entry_index].type = get_record_type(lbx, itr_entry_index);
-        int tmp_len_type_string = snprintf( NULL, 0, "%d", lbx->meta->records->entry[itr_entry_index].type);
+        lbx->meta->records->entry[itr_entry_index].meta_type = get_record_type(lbx, itr_entry_index);
+        int tmp_len_type_string = snprintf( NULL, 0, "%d", lbx->meta->records->entry[itr_entry_index].meta_type);
         lbx->meta->records->entry[itr_entry_index].type_string = malloc(tmp_len_type_string + 1);
-        snprintf(lbx->meta->records->entry[itr_entry_index].type_string, tmp_len_type_string + 1, "%d", lbx->meta->records->entry[itr_entry_index].type);
+        snprintf(lbx->meta->records->entry[itr_entry_index].type_string, tmp_len_type_string + 1, "%d", lbx->meta->records->entry[itr_entry_index].meta_type);
 
-        int tmp_len_type_description_string = snprintf(NULL, 0, "%s", l_LBX_Record_Type_Description[lbx->meta->records->entry[itr_entry_index].type]);
+        int tmp_len_type_description_string = snprintf(NULL, 0, "%s", l_LBX_Record_Type_Description[lbx->meta->records->entry[itr_entry_index].meta_type]);
         lbx->meta->records->entry[itr_entry_index].type_description_string = malloc(sizeof(char) * (tmp_len_type_description_string + 1));
-        snprintf(lbx->meta->records->entry[itr_entry_index].type_description_string, tmp_len_type_description_string + 1, "%s", l_LBX_Record_Type_Description[lbx->meta->records->entry[itr_entry_index].type]);
+        snprintf(lbx->meta->records->entry[itr_entry_index].type_description_string, tmp_len_type_description_string + 1, "%s", l_LBX_Record_Type_Description[lbx->meta->records->entry[itr_entry_index].meta_type]);
 
         /*
          * Record Size
          */
-        lbx->meta->records->entry[itr_entry_index].size = get_record_size(lbx, itr_entry_index);
-        int tmp_len_size_string = snprintf( NULL, 0, "%d", lbx->meta->records->entry[itr_entry_index].size);
+        lbx->meta->records->entry[itr_entry_index].meta_size = get_record_size(lbx, itr_entry_index);
+        int tmp_len_size_string = snprintf( NULL, 0, "%d", lbx->meta->records->entry[itr_entry_index].meta_size);
         lbx->meta->records->entry[itr_entry_index].size_string = malloc(tmp_len_size_string + 1);
-        snprintf(lbx->meta->records->entry[itr_entry_index].size_string, tmp_len_size_string + 1, "%d", lbx->meta->records->entry[itr_entry_index].size);
+        snprintf(lbx->meta->records->entry[itr_entry_index].size_string, tmp_len_size_string + 1, "%d", lbx->meta->records->entry[itr_entry_index].meta_size);
 
         /*
          * Record File Name Base
          */
-        lbx->meta->records->entry[itr_entry_index].record_file_name_base = get_record_file_name_base(lbx, itr_entry_index);
+        lbx->meta->records->entry[itr_entry_index].meta_record_file_name_base = get_record_file_name_base(lbx, itr_entry_index);
 
         /*
          * Checksums - CRC32

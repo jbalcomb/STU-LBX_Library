@@ -36,7 +36,7 @@ void lbx_file_path_and_file_name(LBX_DATA * lbx)
     char * tmp_file_path;
     char * tmp_file_name;
 
-    _splitpath(lbx->meta->file_path,
+    _splitpath(lbx->meta->meta_file_path,
                tmp_windows_splitpath_drive,
                tmp_windows_splitpath_dir,
                tmp_windows_splitpath_fname,
@@ -50,8 +50,8 @@ void lbx_file_path_and_file_name(LBX_DATA * lbx)
     strcpy(tmp_file_name, tmp_windows_splitpath_fname);
     strcat(tmp_file_name, tmp_windows_splitpath_ext);
 
-    lbx->meta->file_path = tmp_file_path;
-    lbx->meta->file_name = tmp_file_name;
+    lbx->meta->meta_file_path = tmp_file_path;
+    lbx->meta->meta_file_name = tmp_file_name;
 
     if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: END: lbx_file_path_and_file_name()\n");
 }
@@ -63,15 +63,15 @@ void lbx_file_name_base(LBX_DATA * lbx)
 
     int itr_file_name_in;
 
-    lbx->meta->file_name_base = malloc(sizeof(char) * (strlen(lbx->meta->file_name) + 1));
-    strcpy(lbx->meta->file_name_base, lbx->meta->file_name);
+    lbx->meta->meta_file_name_base = malloc(sizeof(char) * (strlen(lbx->meta->meta_file_name) + 1));
+    strcpy(lbx->meta->meta_file_name_base, lbx->meta->meta_file_name);
 
-    for (itr_file_name_in = 0; lbx->meta->file_name_base[itr_file_name_in] != 0; itr_file_name_in++)
+    for (itr_file_name_in = 0; lbx->meta->meta_file_name_base[itr_file_name_in] != 0; itr_file_name_in++)
     {
-        if (lbx->meta->file_name[itr_file_name_in] == '.')
+        if (lbx->meta->meta_file_name[itr_file_name_in] == '.')
         {
-            lbx->meta->file_name_base[itr_file_name_in] = '\0';
-            lbx->meta->file_name_base[itr_file_name_in + 1] = '\0';
+            lbx->meta->meta_file_name_base[itr_file_name_in] = '\0';
+            lbx->meta->meta_file_name_base[itr_file_name_in + 1] = '\0';
         }
     }
 

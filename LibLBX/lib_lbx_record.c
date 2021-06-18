@@ -133,8 +133,8 @@ char * get_record_file_name_base(LBX_DATA * lbx, int entry_number)
         tmp_len_entry_number_padding_string = 0;
     }
 
-    record_file_name_base = malloc(sizeof(char) * (strlen(lbx->meta->file_name_base) + tmp_len_entry_number_padding_string + tmp_len_entry_number_string + 1));
-    strcpy(record_file_name_base, lbx->meta->file_name_base);
+    record_file_name_base = malloc(sizeof(char) * (strlen(lbx->meta->meta_file_name_base) + tmp_len_entry_number_padding_string + tmp_len_entry_number_string + 1));
+    strcpy(record_file_name_base, lbx->meta->meta_file_name_base);
     if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: record_file_name_base: %s\n", record_file_name_base);
 
     char * tmp_entry_number_string;

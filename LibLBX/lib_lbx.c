@@ -114,8 +114,8 @@ LBX_DATA * create_lbx_data(char * file_path)
 
     lbx->file_path = malloc(sizeof(char) * (strlen(file_path) + 1));
     strcpy(lbx->file_path, file_path);
-    lbx->meta->file_path = malloc(sizeof(char) * (strlen(file_path) + 1));
-    strcpy(lbx->meta->file_path, file_path);
+    lbx->meta->meta_file_path = malloc(sizeof(char) * (strlen(file_path) + 1));
+    strcpy(lbx->meta->meta_file_path, file_path);
 
     lbx_open_file(lbx);
 
