@@ -73,17 +73,17 @@ message(CTEST_SOURCE_DIRECTORY: ${CTEST_SOURCE_DIRECTORY})
 
 # add_executable(testy lib_lbx_test.c ${TEST_SOURCE_DIR}/src/lib_lbx_test.c)
 # add_executable(testy lib_lbx_test.c)
-add_executable(TestyTester ${TEST_LIBLBX_SOURCES})
+add_executable(LibLbxTester ${TEST_LIBLBX_SOURCES})
 
 target_link_libraries(
-        TestyTester
+        LibLbxTester
         LibLBX
 )
 
 # enable_testing() # already specified in the parent CMakeLists.txt
-add_test(TestyTesterTest TestyTester)
+add_test(LibLbxTesterTest LibLbxTester)
 
-target_sources(TestyTester
+target_sources(LibLbxTester
         PRIVATE
             lib_lbx_test.c
             lib_lbx_test.h
