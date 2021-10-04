@@ -25,8 +25,8 @@
 #include <malloc.h>         /* malloc(), realloc(); */
 #include <stdio.h>          /* fclose(), fopen(), fread(), fwrite(), printf(); FILE */
 #include <stdint.h>         /* ? */
-#include <stdlib.h>         /* itoa(), splitpath(); EXIT_FAILURE, EXIT_SUCCESS; */
-#include <string.h>         /* memcpy(), strcpy(), strncpy(), strlen(); */
+#include <stdlib.h>         /* exit(), itoa(), splitpath(); EXIT_FAILURE, EXIT_SUCCESS; */
+#include <string.h>         /* memcpy(), memset(), strcpy(), strncpy(), strlen(); */
 
 #ifdef _WIN32
 #include <direct.h>
@@ -48,41 +48,174 @@
 // #include "lib_lbx_types.h"
 #include "lib_lbx.h"
 #include "lib_lbx_util.h"
-
-int LBX_DEBUG_MODE = 0;
-int LBX_DEBUG_VERBOSE_MODE = 0;
-int LBX_DEBUG_STRUGGLE_MODE = 0;
-int LBX_DEBUG_LEVEL = 0;
-int lbx_debug_mode = 0;
-int lbx_debug_verbose_mode = 0;
-int lbx_debug_struggle_mode = 0;
+/*#include "lbx_record_type_palette.h"*/  /* LBX_PALETTE */
 
 
-void set_debug_mode(LBX_DATA * lbx)
+
+char * font_file_name = "FONTS.LBX";
+char * palette_file_name = "FONTS.LBX";
+char * fonts_file_name = "FONTS.LBX";
+char * palettes_file_name = "FONTS.LBX";
+char * fonts_file_name_mom = "FONTS.LBX";
+char * palettes_file_name_mom = "FONTS.LBX";
+char * fonts_file_name_mom_131 = "FONTS.LBX";
+char * palettes_file_name_mom_131 = "FONTS.LBX";
+char * font_file_path = "F:\\devel_data\\STU\\MoM131_LBX\\FONTS.LBX";
+char * g_palette_file_path = "F:\\devel_data\\STU\\MoM131_LBX\\FONTS.LBX";
+
+/* Global Variables for FONTS.LBX File */
+FILE * g_FontsLbxFileStream;
+unsigned char * g_FontsLbxFileBuffer;
+lbx_uint32 g_FontsLbxFileBuffer_len;
+char * g_FontsLbxFileName = "FONTS.LBX";
+char * g_FontsLbxFileNameBase = "FONTS";
+lbx_uint8 g_FontsLbxEntryNumber;
+lbx_uint8 g_FontsLbxEntryCount = 9;
+lbx_uint16 g_FontsLbxFileSize = 57536;
+lbx_uint16 g_FontsLbxRecordSize;
+
+/* Global Variables for Current LBX File */
+FILE * g_LbxFileStream;
+unsigned char * g_LbxFileBuffer;
+char * g_LbxFileName;
+char * g_LbxFileNameBase;
+lbx_uint8 g_LbxEntryNumber;
+lbx_uint8 g_LbxEntryCount;
+lbx_uint16 g_LbxFileSize;
+lbx_uint16 g_LbxRecordSize;
+
+/* Global Variables for Current Font */
+
+/* Global Variables for Current Palette */
+/*LBX_PALETTE g_LbxPalette;*/
+/* Global Variables for ALL LBX Files */
+
+/* Global Variables for ALL LBX Entries */
+
+/* Global Variables for ALL LBX Records */
+
+/* Global Variables for ALL Fonts */
+
+/* Global Variables for ALL Palettes */
+char * g_PaletteNumberZero;
+char * g_PaletteNumberOne;
+char * g_PaletteNumberTwo;
+char * g_PaletteNumberThree;
+char * g_PaletteNumberFour;
+char * g_PaletteNumberFive;
+char * g_PaletteNumberSix;
+char * g_PaletteNumberSeven;
+
+/* Global Variables for Debug Mode Flags & Levels */
+int LBX_DEBUG_MODE;
+int LBX_DEBUG_VERBOSE_MODE;
+int LBX_DEBUG_STRUGGLE_MODE;
+int LBX_DEBUG_LEVEL;
+int lbx_debug_mode;
+int lbx_debug_verbose_mode;
+int lbx_debug_struggle_mode;
+/* TODO(JWB): figure out and fix the debug flags coming in from the client app */
+
+/* Global Variables for Program Diagnostics */
+unsigned int g_MemoryAllocated = 0;
+
+int LBX_EXPORT_BMP;
+
+/*
+ * "Used for array indexes!  Don't change the numbers!" - SO-404231 <https://stackoverflow.com/a/404263>
+ */
+//enum LBX_Record_Type {
+//    LBX_RECORD_TYPE_EMPTY = 0,          /* 0 bytes */
+//    LBX_RECORD_TYPE_ARRAY = 1,          /* <n> <recordsize> equals size */
+//    LBX_RECORD_TYPE_SOUND_XMIDI = 2,          /* 0xDEAF 0x0001 */
+//    LBX_RECORD_TYPE_SOUND_VOC = 3,            /* 0xDEAF 0x0002 */
+//    LBX_RECORD_TYPE_SOUND_UNKNOWN = 4,            /* 0xDEAF 0x???? */
+//    LBX_RECORD_TYPE_PALETTE = 5,        /* FONTS.LBX 2+ */
+//    /* LBX_RECORD_TYPE_IMAGE = 6,         / * <width> <height> = 3x3 (in MAIN.LBX) up to 320x200 * / */
+//    LBX_RECORD_TYPE_FLIC = 6,
+//    LBX_RECORD_TYPE_FONT = 7,           /* FONTS.LBX 0 */
+//    LBX_RECORD_TYPE_AIL_AIL_DRIVER = 8,  /* SNDDRV.LBX */
+//    LBX_RECORD_TYPE_AIL_DIGPAK_DRIVER = 9,  /* SNDDRV.LBX */
+//    LBX_RECORD_TYPE_CUSTOM = 10,         /* Other (sound drivers, TERR*.LBX) */
+//    LBX_RECORD_TYPE_UNKNOWN = 11,
+//    /* LBX_RECORD_TYPE_ANIMATION = 12, / * frame_raw/nFrames/frame_count > 0 i.e., not an Image (single-frame_raw animation) * / */
+//    LBX_RECORD_TYPE_COUNT
+//};
+/* TODO(JWB): move this to where the RECORD_TYPE enum is */
+//char l_LBX_Record_Type_Description[13][34] = {
+//        "EMPTY",
+//        "Array",
+//        "XMIDI",
+//        "VOC",
+//        "Sound",
+//        "Palette",
+//        "Image",
+//        "Font",
+//        "AIL Driver",
+//        "DIGPAK Driver",
+//        "Custom",
+//        "UNKNOWN",
+//        "Animation"
+//};
+//#ifndef LBX_RECORD_TYPE_INDEX
+//#define LBX_RECORD_TYPE_INDEX
+///*
+//char LBX_Record_Type_Name[12][34] = {
+//        "LBX_RECORD_TYPE_EMPTY",
+//        "LBX_RECORD_TYPE_ARRAY",
+//        "LBX_RECORD_TYPE_SOUND_XMIDI",
+//        "LBX_RECORD_TYPE_SOUND_VOC",
+//        "LBX_RECORD_TYPE_SOUND_UNKNOWN",
+//        "LBX_RECORD_TYPE_PALETTE",
+//        "LBX_RECORD_TYPE_IMAGE",
+//        "LBX_RECORD_TYPE_FONT",
+//        "LBX_RECORD_TYPE_AIL_AIL_DRIVER",
+//        "LBX_RECORD_TYPE_AIL_DIGPAK_DRIVER",
+//        "LBX_RECORD_TYPE_CUSTOM",
+//        "LBX_RECORD_TYPE_UNKNOWN"
+//};
+//*/
+//#endif /* LBX_RECORD_TYPE_INDEX */
+char LBX_Record_Type_Description[13][34] = {
+        "EMPTY",
+        "Array",
+        "XMIDI",
+        "VOC",
+        "Sound",
+        "Palette",
+        /* "image", */
+        "FLIC",
+        "Font",
+        "AIL Driver",
+        "DIGPAK Driver",
+        "Custom",
+        "UNKNOWN",
+        /* "Animation", */
+        "LBX_RECORD_TYPE_COUNT"
+};
+
+void lbx_set_debug_mode()
 {
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: BEGIN: set_debug_mode()\n");
-
     lbx_debug_mode = 1;
-
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: END: set_debug_mode()\n");
+    LBX_DEBUG_MODE = 1;
 }
 
-void set_debug_verbose_mode(LBX_DATA * lbx)
+void lbx_set_debug_verbose_mode()
 {
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: BEGIN: set_debug_verbose_mode()\n");
-
+    lbx_debug_mode = 1;
+    LBX_DEBUG_MODE = 1;
     lbx_debug_verbose_mode = 1;
-
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: END: set_debug_verbose_mode()\n");
+    LBX_DEBUG_VERBOSE_MODE = 1;
 }
 
-void set_debug_struggle_mode(LBX_DATA * lbx)
+void lbx_set_debug_struggle_mode()
 {
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: BEGIN: set_debug_verbose_mode()\n");
-
+    lbx_debug_mode = 1;
+    LBX_DEBUG_MODE = 1;
+    lbx_debug_verbose_mode = 1;
+    LBX_DEBUG_VERBOSE_MODE = 1;
     lbx_debug_struggle_mode = 1;
-
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: END: set_debug_verbose_mode()\n");
+    LBX_DEBUG_STRUGGLE_MODE = 1;
 }
 
 /* Creation and Destruction. */
@@ -92,6 +225,9 @@ LBX_DATA * create_lbx_data(char * file_path)
 
     LBX_DATA * lbx;
     lbx = malloc(sizeof(LBX_DATA));
+    lbx->file = malloc(sizeof(LBX_FILE_DATA));
+    lbx->record = malloc(sizeof(LBX_RECORD_DATA));
+
     lbx->header = malloc(sizeof(LBX_HEADER));
     lbx->header->offset_table = malloc(sizeof(LBX_HEADER_OFFSET_TABLE));
     lbx->header->string_table = malloc(sizeof(LBX_HEADER_STRING_TABLE));
@@ -101,23 +237,21 @@ LBX_DATA * create_lbx_data(char * file_path)
 
     if (LBX_DEBUG_MODE == 1)
     {
-        set_debug_mode(lbx);
+        lbx_set_debug_mode();
     }
     if (LBX_DEBUG_VERBOSE_MODE == 1)
     {
-        set_debug_verbose_mode(lbx);
+        lbx_set_debug_verbose_mode();
     }
     if (LBX_DEBUG_STRUGGLE_MODE == 1)
     {
-        set_debug_struggle_mode(lbx);
+        lbx_set_debug_struggle_mode();
     }
 
-    lbx->file_path = malloc(sizeof(char) * (strlen(file_path) + 1));
-    strcpy(lbx->file_path, file_path);
-    lbx->meta->meta_file_path = malloc(sizeof(char) * (strlen(file_path) + 1));
-    strcpy(lbx->meta->meta_file_path, file_path);
+    lbx->file->file_path = malloc(sizeof(char) * (strlen(file_path) + 1));
+    strcpy(lbx->file->file_path, file_path);
 
-    lbx_open_file(lbx);
+    liblbx_open_file(lbx);
 
     if (LBX_DEBUG_MODE) printf("DEBUG: END: create_lbx_data()\n");
     return lbx;
@@ -127,10 +261,10 @@ void destroy_lbx_data(LBX_DATA * lbx)
 {
     if (LBX_DEBUG_MODE) printf("DEBUG: BEGIN: destroy_lbx_data()\n");
 
-    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: lbx_close_file(lbx)\n");
-    lbx_close_file(lbx);
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: liblbx_close_file(lbx)\n");
+    liblbx_close_file(lbx);
     if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: free(lbx->file_path)\n");
-    free(lbx->file_path);
+    free(lbx->file->file_path);
 
     if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: free(lbx->meta->records)\n");
     free(lbx->meta->records);
@@ -147,36 +281,40 @@ void destroy_lbx_data(LBX_DATA * lbx)
     if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: free(lbx->header)\n");
     free(lbx->header);
 
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: free(lbx->record)\n");
+    free(lbx->record);
+
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: free(lbx->file)\n");
+    free(lbx->file);
+
     if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: free(lbx)\n");
     free(lbx);
 
     if (LBX_DEBUG_MODE) printf("DEBUG: END: destroy_lbx_data()\n");
 }
 
-void lbx_open_file(LBX_DATA * lbx)
+void liblbx_open_file(LBX_DATA * lbx)
 {
-    if (LBX_DEBUG_MODE) printf("DEBUG: BEGIN: lbx_open_file()\n");
+    if (LBX_DEBUG_MODE) printf("DEBUG: BEGIN: liblbx_open_file()\n");
 
-    lbx->file_stream = fopen(lbx->file_path, "rb");
+    lbx->file->file_stream = fopen(lbx->file->file_path, "rb");
 
-    if (lbx->file_stream == NULL) {
-        printf("FAILURE: Error opening file: %s\n", lbx->file_path);
+    if (lbx->file->file_stream == NULL) {
+        printf("FAILURE: Error opening file: %s\n", lbx->file->file_path);
         exit(EXIT_FAILURE);
     }
 
-    if (LBX_DEBUG_MODE) printf("DEBUG: END: lbx_open_file()\n");
+    if (LBX_DEBUG_MODE) printf("DEBUG: END: liblbx_open_file()\n");
 }
 
-void lbx_close_file(LBX_DATA * lbx)
+void liblbx_close_file(LBX_DATA * lbx)
 {
-    fclose(lbx->file_stream);
+    fclose(lbx->file->file_stream);
 }
 
 void lbx_load_header(LBX_DATA * lbx)
 {
     if (LBX_DEBUG_MODE) printf("DEBUG: BEGIN: lbx_load_header()\n");
-
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: BEGIN: Declare Variables\n");
 
     size_t tmp_pos;
     uint32_t tmp_offset;
@@ -184,11 +322,10 @@ void lbx_load_header(LBX_DATA * lbx)
     int itr_lbx_string_table;
     int tmp_string_table_length;
 
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: END: Declare Variables\n");
 
-    tmp_pos = ftell(lbx->file_stream);
+    tmp_pos = ftell(lbx->file->file_stream);
 
-    fseek(lbx->file_stream, LBX_OFFSET_TO_HEADER_PREAMBLE, SEEK_SET);
+    fseek(lbx->file->file_stream, LBX_OFFSET_TO_HEADER_PREAMBLE, SEEK_SET);
 
     /*#################################**
     **###     Header - Preamble     ###**
@@ -196,10 +333,10 @@ void lbx_load_header(LBX_DATA * lbx)
 
     if (LBX_DEBUG_MODE) printf("DEBUG: BEGIN: Header - Preamble\n");
 
-    lbx->header->entry_count = lbx_read_2byte_le(lbx->file_stream);
-    lbx->header->magic = lbx_read_2byte_le(lbx->file_stream);
-    lbx->header->unknown = lbx_read_2byte_le(lbx->file_stream);
-    lbx->header->type = lbx_read_2byte_le(lbx->file_stream);
+    lbx->header->entry_count = liblbx_read_2byte_le(lbx->file->file_stream);
+    lbx->header->magic = liblbx_read_2byte_le(lbx->file->file_stream);
+    lbx->header->unknown = liblbx_read_2byte_le(lbx->file->file_stream);
+    lbx->header->type = liblbx_read_2byte_le(lbx->file->file_stream);
 
     if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: lbx->header->preamble->entry_count: %d\n", lbx->header->entry_count);
     if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: lbx->header->preamble->magic: %d\n", lbx->header->magic);
@@ -217,7 +354,7 @@ void lbx_load_header(LBX_DATA * lbx)
     /* TODO(JWB): fix the "125 + 1" entry count; add MAX or memset('\0') or ? */
     for (itr_lbx_offset_table = 0; itr_lbx_offset_table < LBX_OFFSET_TABLE_MAXIMUM; itr_lbx_offset_table++)
     {
-        tmp_offset = lbx_read_4byte_le(lbx->file_stream);
+        tmp_offset = liblbx_read_4byte_le(lbx->file->file_stream);
         lbx->header->offset_table->entry[itr_lbx_offset_table].begin = tmp_offset;
     }
 
@@ -263,8 +400,8 @@ void lbx_load_header(LBX_DATA * lbx)
         {
             /* TODO(JWB): add specific functions to handle reading the string table name and description (maybe read 32, split 9 & 23) */
             /* TODO(JWB): fix-up up the erroneous null-terminator in the string table names e.g., {'T','E','S','T','\0','F','L','C','\0'} */
-            fread(lbx->header->string_table->entry[itr_lbx_string_table].name, LBX_LENGTH_STRING_TABLE_ENTRY_NAME, 1, lbx->file_stream);
-            fread(lbx->header->string_table->entry[itr_lbx_string_table].description, LBX_LENGTH_STRING_TABLE_ENTRY_DESCRIPTION, 1, lbx->file_stream);
+            fread(lbx->header->string_table->entry[itr_lbx_string_table].name, LBX_LENGTH_STRING_TABLE_ENTRY_NAME, 1, lbx->file->file_stream);
+            fread(lbx->header->string_table->entry[itr_lbx_string_table].description, LBX_LENGTH_STRING_TABLE_ENTRY_DESCRIPTION, 1, lbx->file->file_stream);
         }
     }
     else
@@ -284,7 +421,7 @@ void lbx_load_header(LBX_DATA * lbx)
 
     if (LBX_DEBUG_MODE) printf("DEBUG: END: Header - String Table\n");
 
-    fseek(lbx->file_stream, tmp_pos, SEEK_SET);
+    fseek(lbx->file->file_stream, tmp_pos, SEEK_SET);
 
     if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: END: lbx_load_header()\n");
 }

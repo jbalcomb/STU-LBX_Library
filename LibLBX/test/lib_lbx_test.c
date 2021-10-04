@@ -5,7 +5,7 @@
 #include "lib_lbx_test.h"
 
 #include "../lib_lbx_process_lbx.h"
-#include "../lib_lbx_record_flic.h"
+/*#include "../lib_lbx_record_flic.h"*/
 
 #include "../ATS/ats_matrix_transform.h"
 #include "../ATS/ats_print_box.h"
@@ -19,10 +19,10 @@
 #include "../lib_lbx_util.h"
 #include "../lib_lbx_load_header.h"
 #include "../lib_lbx_meta_data.h"
-#include "../lib_lbx_file_type_bmp.h"
+/*#include "../lib_lbx_file_type_bmp.h"*/
 #include "../lib_lbx_load.h"
-#include "../lib_lbx_record_flic.h"
-#include "../lib_lbx_record_palette.h"
+/*#include "../lib_lbx_record_flic.h"*/
+/*#include "../lib_lbx_record_palette.h"*/
 
 char TEST_DIRECTORY_PATH[] = "F:\\devel_data\\STU\\MoM131_LBX\\";
 char TEST_FILE_PATH[] = "F:\\devel_data\\STU\\MoM131_LBX\\MAIN.LBX";
@@ -145,169 +145,177 @@ unsigned int TARGET_ENTRY_INDEX = 0;
 //
 //}
 
-void test_print_array()
-{
-    unsigned int row_count;
-    unsigned int column_count;
-    unsigned int element_count;
-    unsigned char * array_buffer;
+// 2021-10-04 10:54
+// Commenting out everything that should have been in Graphics/FLIC/BMP/Palette/Font
+//void test_print_array()
+//{
+//    unsigned int row_count;
+//    unsigned int column_count;
+//    unsigned int element_count;
+//    unsigned char * array_buffer;
+//
+//    row_count = 8;
+//    column_count = 5;
+//    element_count = column_count * row_count;
+//
+//    array_buffer = (unsigned char *)malloc(element_count);
+//    memcpy(array_buffer, test_array_pixels_onscreen, sizeof(test_array_pixels_onscreen));
+//    print_array(array_buffer, element_count);
+//
+//    print_array(array_buffer, element_count);
+//
+//}
 
-    row_count = 8;
-    column_count = 5;
-    element_count = column_count * row_count;
-
-    array_buffer = (unsigned char *)malloc(element_count);
-    memcpy(array_buffer, test_array_pixels_onscreen, sizeof(test_array_pixels_onscreen));
-    print_array(array_buffer, element_count);
-
-    print_array(array_buffer, element_count);
-
-}
-
-void test_test_print_arrays_orders()
-{
-    // test_print_arrays_orders();
-    unsigned int row_count;
-    unsigned int column_count;
-    unsigned int element_count;
-
-    unsigned char * array_tlo_rmo;
-    unsigned char * array_tlo_cmo;
-    unsigned char * array_blo_rmo;
-    unsigned char * array_blo_cmo;
-
-    row_count = 5;
-    column_count = 8;
-    element_count = column_count * row_count;
-
-    array_tlo_rmo = malloc(element_count);
-    array_tlo_cmo = malloc(element_count);
-    array_blo_rmo = malloc(element_count);
-    array_blo_cmo = malloc(element_count);
-
-    // print_array_in_row_major_order(array_tlo_rmo, row_count, column_count);
-    // print_array_in_column_major_order(array_tlo_rmo, row_count, column_count);
-
-//    print_array(test_array_pixels_onscreen, element_count);
-//    print_matrix_with_box(test_array_pixels_onscreen, row_count, column_count);
-//    print_array_with_matrix_indices(test_array_pixels_onscreen, element_count, row_count, column_count);
-
-//    /* Top-Left Origin, Row-Major-Order */
-//    /*  */
-//    memcpy(array_tlo_rmo, test_array_pixels_onscreen, sizeof(test_array_pixels_onscreen));
-//    print_array(array_tlo_rmo, element_count);
+// 2021-10-04 10:54
+// Commenting out everything that should have been in Graphics/FLIC/BMP/Palette/Font
+//void test_test_print_arrays_orders()
+//{
+//    // test_print_arrays_orders();
+//    unsigned int row_count;
+//    unsigned int column_count;
+//    unsigned int element_count;
+//
+//    unsigned char * array_tlo_rmo;
+//    unsigned char * array_tlo_cmo;
+//    unsigned char * array_blo_rmo;
+//    unsigned char * array_blo_cmo;
+//
+//    row_count = 5;
+//    column_count = 8;
+//    element_count = column_count * row_count;
+//
+//    array_tlo_rmo = malloc(element_count);
+//    array_tlo_cmo = malloc(element_count);
+//    array_blo_rmo = malloc(element_count);
+//    array_blo_cmo = malloc(element_count);
+//
+//    // print_array_in_row_major_order(array_tlo_rmo, row_count, column_count);
+//    // print_array_in_column_major_order(array_tlo_rmo, row_count, column_count);
+//
+////    print_array(test_array_pixels_onscreen, element_count);
+////    print_matrix_with_box(test_array_pixels_onscreen, row_count, column_count);
+////    print_array_with_matrix_indices(test_array_pixels_onscreen, element_count, row_count, column_count);
+//
+////    /* Top-Left Origin, Row-Major-Order */
+////    /*  */
+////    memcpy(array_tlo_rmo, test_array_pixels_onscreen, sizeof(test_array_pixels_onscreen));
+////    print_array(array_tlo_rmo, element_count);
+////    printf("\n");
+////    printf("Top-Left Origin, Row-Major-Order\n");
+////    print_matrix_with_box(array_tlo_rmo, row_count, column_count);
+////    printf("\n");
+////
+////    /* Top-Left Origin, Column-Major-Order */
+////    /*  */
+////    // array_tlo_cmo = copy_array_to_tlo_cmo_from_array_tlo_rmo(array_tlo_rmo, row_count, column_count);
+////    array_tlo_cmo = alloc_transpose(array_tlo_rmo, row_count, column_count);
+////    print_array(array_tlo_cmo, element_count);
+////    printf("\n");
+////    printf("Top-Left Origin, Column-Major-Order\n");
+////    print_matrix_with_box(array_tlo_cmo, column_count, row_count);
+////    printf("\n");
+//
+////    unsigned char * flipped_array_tlo_rmo;
+////    flipped_array_tlo_rmo = malloc(element_count);
+////    memcpy(flipped_array_tlo_rmo, test_array_pixels_onscreen, sizeof(test_array_pixels_onscreen));
+////    flip_array_horizontal(&flipped_array_tlo_rmo, row_count, column_count);
+////    print_array(flipped_array_tlo_rmo, element_count);
+////    printf("\n");
+////    printf("Flipped - Top-Left Origin, Row-Major-Order\n");
+////    print_matrix_with_box(flipped_array_tlo_rmo, row_count, column_count);
+////    printf("\n");
+//
+//    unsigned char * flic_test_fake;
+//    flic_test_fake = malloc(element_count);
+//    memcpy(flic_test_fake, flic_array_test_fake, sizeof(test_array_pixels_onscreen));
 //    printf("\n");
-//    printf("Top-Left Origin, Row-Major-Order\n");
-//    print_matrix_with_box(array_tlo_rmo, row_count, column_count);
+//    printf("FLIC Test Fake\n");
+//    print_matrix_with_box(flic_test_fake, column_count, row_count);
 //    printf("\n");
 //
-//    /* Top-Left Origin, Column-Major-Order */
+//    unsigned char * transposed_flic_test_fake;
+//    transposed_flic_test_fake = malloc(element_count);
+//    transpose(transposed_flic_test_fake, flic_test_fake, column_count, row_count);
+//    print_array(transposed_flic_test_fake, element_count);
+//    printf("\n");
+//    printf("Transposed - FLIC Test Fake\n");
+//    print_matrix_with_box(transposed_flic_test_fake, row_count, column_count);
+//    printf("\n");
+//
+//    unsigned char * flipped_transposed_flic_test_fake;
+//    flipped_transposed_flic_test_fake = malloc(element_count);
+//    flipH(flipped_transposed_flic_test_fake, transposed_flic_test_fake, row_count, column_count);
+//    print_array(flipped_transposed_flic_test_fake, element_count);
+//    printf("\n");
+//    printf("Flipped, Transposed - FLIC Test Fake\n");
+//    print_matrix_with_box(flipped_transposed_flic_test_fake, row_count, column_count);
+//    printf("\n");
+//
+//
+//    /* Bottom-Left Origin, Row-Major-Order */
 //    /*  */
-//    // array_tlo_cmo = copy_array_to_tlo_cmo_from_array_tlo_rmo(array_tlo_rmo, row_count, column_count);
-//    array_tlo_cmo = alloc_transpose(array_tlo_rmo, row_count, column_count);
-//    print_array(array_tlo_cmo, element_count);
-//    printf("\n");
-//    printf("Top-Left Origin, Column-Major-Order\n");
-//    print_matrix_with_box(array_tlo_cmo, column_count, row_count);
-//    printf("\n");
+//    /*array_blo_rmo = to_array_blo_rmo_from_array_tlo_rmo(array_tlo_cmo, row_count, column_count);*/
+//
+//    /* Bottom-Left Origin, Column-Major-Order */
+//    /*  */
+//    /*array_blo_cmo = to_array_blo_cmo_from_array_tlo_rmo(array_tlo_cmo, row_count, column_count);*/
+//
+//
+//    // test_matrix_8x5_pixels_onscreen
+//
+//
+//}
 
-//    unsigned char * flipped_array_tlo_rmo;
-//    flipped_array_tlo_rmo = malloc(element_count);
-//    memcpy(flipped_array_tlo_rmo, test_array_pixels_onscreen, sizeof(test_array_pixels_onscreen));
-//    flip_array_horizontal(&flipped_array_tlo_rmo, row_count, column_count);
-//    print_array(flipped_array_tlo_rmo, element_count);
-//    printf("\n");
-//    printf("Flipped - Top-Left Origin, Row-Major-Order\n");
-//    print_matrix_with_box(flipped_array_tlo_rmo, row_count, column_count);
-//    printf("\n");
-
-    unsigned char * flic_test_fake;
-    flic_test_fake = malloc(element_count);
-    memcpy(flic_test_fake, flic_array_test_fake, sizeof(test_array_pixels_onscreen));
-    printf("\n");
-    printf("FLIC Test Fake\n");
-    print_matrix_with_box(flic_test_fake, column_count, row_count);
-    printf("\n");
-
-    unsigned char * transposed_flic_test_fake;
-    transposed_flic_test_fake = malloc(element_count);
-    transpose(transposed_flic_test_fake, flic_test_fake, column_count, row_count);
-    print_array(transposed_flic_test_fake, element_count);
-    printf("\n");
-    printf("Transposed - FLIC Test Fake\n");
-    print_matrix_with_box(transposed_flic_test_fake, row_count, column_count);
-    printf("\n");
-
-    unsigned char * flipped_transposed_flic_test_fake;
-    flipped_transposed_flic_test_fake = malloc(element_count);
-    flipH(flipped_transposed_flic_test_fake, transposed_flic_test_fake, row_count, column_count);
-    print_array(flipped_transposed_flic_test_fake, element_count);
-    printf("\n");
-    printf("Flipped, Transposed - FLIC Test Fake\n");
-    print_matrix_with_box(flipped_transposed_flic_test_fake, row_count, column_count);
-    printf("\n");
-
-
-    /* Bottom-Left Origin, Row-Major-Order */
-    /*  */
-    /*array_blo_rmo = to_array_blo_rmo_from_array_tlo_rmo(array_tlo_cmo, row_count, column_count);*/
-
-    /* Bottom-Left Origin, Column-Major-Order */
-    /*  */
-    /*array_blo_cmo = to_array_blo_cmo_from_array_tlo_rmo(array_tlo_cmo, row_count, column_count);*/
-
-
-    // test_matrix_8x5_pixels_onscreen
-
-
-}
-
-void test_export_MAIN000_FF0_BMP()
-{
-    printf("LBX_DEBUG_MODE: %u\n", LBX_DEBUG_MODE);
-    printf("LBX_DEBUG_VERBOSE_MODE: %u\n", LBX_DEBUG_VERBOSE_MODE);
-    printf("LBX_DEBUG_STRUGGLE_MODE: %u\n", LBX_DEBUG_STRUGGLE_MODE);
-
-    // char * test_lbx_file_path = "F:\\devel_data\\STU\\MoM131_LBX\\FONTS.LBX";
-    char * test_lbx_file_path = "F:\\devel_data\\STU\\MoM131_LBX\\MAIN.LBX";
-
-    LBX_DATA * lbx;
-
-    lbx = create_lbx_data(test_lbx_file_path);
-
-    /*
-     * liblbx_process_lbx_file(lbx);
-     * */
-    liblbx_directory_path_and_file_name(lbx);
-    liblbx_file_name_base(lbx);
-    liblbx_load_lbx_file_header_from_lbx_data_file_handle(lbx);
-    liblbx_populate_lbx_record_file_name_base(lbx);
-    /*liblbx_display_lbx_record_file_name_base(lbx);*/
-    liblbx_load_lbx_record_data(lbx);
-    liblbx_populate_lbx_record_type(lbx);
-    /*liblbx_display_lbx_record_type(lbx);*/
-    liblbx_load_lbx_record_headers(lbx);
-    /*liblbx_display_lbx_record_headers_long(lbx);*/
-    /*liblbx_display_lbx_record_headers_wide(lbx);*/
-    liblbx_load_lbx_record_flic_frame_data(lbx);
-    /*liblbx_display_lbx_record_headers_long(lbx);*/
-    /*liblbx_display_lbx_flic_frame_header();*/
-
-    liblbx_decompress_flic_rle_record_data(lbx);
-
-    BMP_FILE * bmp;
-    bmp = malloc(sizeof(BMP_FILE));
-//    // liblbx_convert_flic_frame_to_bmp(bmp, lbx);
-//    /* 0: MAIN000, MAINSCRN - main screen, 320x200, 1 frame; 1: MAIN001, MAINBUTN - game button, 39x12, 2 frames */
-    // liblbx_convert_flic_frame_to_bmp(bmp, lbx, 0, 0);
-    LBX_DEBUG_MODE = 1;
-    LBX_DEBUG_VERBOSE_MODE = 1;
-    LBX_DEBUG_STRUGGLE_MODE = 1;
-
-
-    liblbx_convert_flic_frame_to_bmp(bmp, lbx, 0, 0, EMPERATO);
-
-}
+// 2021-10-04 10:54
+// Commenting out everything that should have been in Graphics/FLIC/BMP/Palette/Font
+//void test_export_MAIN000_FF0_BMP()
+//{
+//    printf("LBX_DEBUG_MODE: %u\n", LBX_DEBUG_MODE);
+//    printf("LBX_DEBUG_VERBOSE_MODE: %u\n", LBX_DEBUG_VERBOSE_MODE);
+//    printf("LBX_DEBUG_STRUGGLE_MODE: %u\n", LBX_DEBUG_STRUGGLE_MODE);
+//
+//    // char * test_lbx_file_path = "F:\\devel_data\\STU\\MoM131_LBX\\FONTS.LBX";
+//    char * test_lbx_file_path = "F:\\devel_data\\STU\\MoM131_LBX\\MAIN.LBX";
+//
+//    LBX_DATA * lbx;
+//
+//    lbx = create_lbx_data(test_lbx_file_path);
+//
+//    /*
+//     * liblbx_process_lbx_file(lbx);
+//     * */
+//    liblbx_directory_path_and_file_name(lbx);
+//    liblbx_file_name_base(lbx);
+//    liblbx_load_lbx_file_header_from_lbx_data_file_handle(lbx);
+//    liblbx_populate_lbx_record_file_name_base(lbx);
+//    /*liblbx_display_lbx_record_file_name_base(lbx);*/
+//    liblbx_load_lbx_record_data(lbx);
+//    liblbx_populate_lbx_record_type(lbx);
+//    /*liblbx_display_lbx_record_type(lbx);*/
+//    liblbx_load_lbx_record_headers(lbx);
+//    /*liblbx_display_lbx_record_headers_long(lbx);*/
+//    /*liblbx_display_lbx_record_headers_wide(lbx);*/
+//// 2021-10-04 10:54
+//// Commenting out everything that should have been in Graphics/FLIC/BMP/Palette/Font
+////    liblbx_load_lbx_record_flic_frame_data(lbx);
+////    /*liblbx_display_lbx_record_headers_long(lbx);*/
+////    /*liblbx_display_lbx_flic_frame_header();*/
+////
+////    liblbx_decompress_flic_rle_record_data(lbx);
+////
+////    BMP_FILE * bmp;
+////    bmp = malloc(sizeof(BMP_FILE));
+//// //    // liblbx_convert_flic_frame_to_bmp(bmp, lbx);
+//// //    /* 0: MAIN000, MAINSCRN - main screen, 320x200, 1 frame; 1: MAIN001, MAINBUTN - game button, 39x12, 2 frames */
+////    // liblbx_convert_flic_frame_to_bmp(bmp, lbx, 0, 0);
+////    LBX_DEBUG_MODE = 1;
+////    LBX_DEBUG_VERBOSE_MODE = 1;
+////    LBX_DEBUG_STRUGGLE_MODE = 1;
+////
+////
+////    liblbx_convert_flic_frame_to_bmp(bmp, lbx, 0, 0, EMPERATO);
+//
+//}
 
 void test_lbx()
 {
@@ -336,23 +344,25 @@ void test_lbx()
     liblbx_load_lbx_record_headers(lbx);
     /*liblbx_display_lbx_record_headers_long(lbx);*/
     /*liblbx_display_lbx_record_headers_wide(lbx);*/
-    liblbx_load_lbx_record_flic_frame_data(lbx);
-    /*liblbx_display_lbx_record_headers_long(lbx);*/
-    /*liblbx_display_lbx_flic_frame_header();*/
-
-    liblbx_decompress_flic_rle_record_data(lbx);
-
-    BMP_FILE * bmp;
-    bmp = malloc(sizeof(BMP_FILE));
-//    // liblbx_convert_flic_frame_to_bmp(bmp, lbx);
-//    /* 0: MAIN000, MAINSCRN - main screen, 320x200, 1 frame; 1: MAIN001, MAINBUTN - game button, 39x12, 2 frames */
-    // liblbx_convert_flic_frame_to_bmp(bmp, lbx, 0, 0);
-    LBX_DEBUG_MODE = 1;
-    LBX_DEBUG_VERBOSE_MODE = 1;
-    LBX_DEBUG_STRUGGLE_MODE = 1;
-
-
-    liblbx_convert_flic_frame_to_bmp(bmp, lbx, 1, 0, EMPERATO);
+// 2021-10-04 10:54
+// Commenting out everything that should have been in Graphics/FLIC/BMP/Palette/Font
+//    liblbx_load_lbx_record_flic_frame_data(lbx);
+//    /*liblbx_display_lbx_record_headers_long(lbx);*/
+//    /*liblbx_display_lbx_flic_frame_header();*/
+//
+//    liblbx_decompress_flic_rle_record_data(lbx);
+//
+//    BMP_FILE * bmp;
+//    bmp = malloc(sizeof(BMP_FILE));
+// //    // liblbx_convert_flic_frame_to_bmp(bmp, lbx);
+// //    /* 0: MAIN000, MAINSCRN - main screen, 320x200, 1 frame; 1: MAIN001, MAINBUTN - game button, 39x12, 2 frames */
+//    // liblbx_convert_flic_frame_to_bmp(bmp, lbx, 0, 0);
+//    LBX_DEBUG_MODE = 1;
+//    LBX_DEBUG_VERBOSE_MODE = 1;
+//    LBX_DEBUG_STRUGGLE_MODE = 1;
+//
+//
+//    liblbx_convert_flic_frame_to_bmp(bmp, lbx, 1, 0, EMPERATO);
 
 
 //    liblbx_populate_lbx_meta_data(lbx);
@@ -421,44 +431,46 @@ typedef struct PJ_colormap {
 /* J:\STU\DBWD\developc\_AnimatorPro\Pristine-Pro\PJHIGH\COLLOAD.C */
 #define OLD_SIZE (3*COLORS)
 
-void test_load_lbx_palette()
-{
-
-    /* lbx_record_type_palette.h enum mom_palette_number */
-    unsigned char * lbx_palette_record;
-    lbx_palette_record = liblbx_load_palette_record(g_palette_file_path, EMPERATO);
-
-    unsigned char * lbx_palette;
-    lbx_palette = liblbx_load_palette(g_palette_file_path, EMPERATO);
-
-
-    unsigned int itr_lbx_palette;
-
-    for (itr_lbx_palette = 0; itr_lbx_palette < 32; itr_lbx_palette++)
-    {
-        printf("[%u] %u (0x%02X)\n", itr_lbx_palette, lbx_palette[itr_lbx_palette], lbx_palette[itr_lbx_palette]);
-    }
-
-    int itr_lbx_palette_number;
-    char * export_palette_file_path_base;
-
-    for (itr_lbx_palette_number = 1; itr_lbx_palette_number <= 7; itr_lbx_palette_number++)
-    {
-        export_palette_file_path_base = malloc(MAX_PATH);
-        strcpy(export_palette_file_path_base, "F:");
-        strcat(export_palette_file_path_base, "\\");
-        strcat(export_palette_file_path_base, "devel_data\\STU\\MoM131_LBX");
-        strcat(export_palette_file_path_base, "\\");
-        strcat(export_palette_file_path_base, "EXPORT");
-        strcat(export_palette_file_path_base, "\\");
-        strcat(export_palette_file_path_base, mom_palette_name[itr_lbx_palette_number]);
-        printf("export_palette_file_path_base: %s\n", export_palette_file_path_base);
-        printf("Palette: %d %s\n", itr_lbx_palette_number, mom_palette_name[itr_lbx_palette_number]);
-        liblbx_export_palette(g_palette_file_path, itr_lbx_palette_number, export_palette_file_path_base);
-    }
-
-
-}
+// 2021-10-04 10:54
+// Commenting out everything that should have been in Graphics/FLIC/BMP/Palette/Font
+//void test_load_lbx_palette()
+//{
+//
+//    /* lbx_record_type_palette.h enum mom_palette_number */
+//    unsigned char * lbx_palette_record;
+//    lbx_palette_record = liblbx_load_palette_record(g_palette_file_path, EMPERATO);
+//
+//    unsigned char * lbx_palette;
+//    lbx_palette = liblbx_load_palette(g_palette_file_path, EMPERATO);
+//
+//
+//    unsigned int itr_lbx_palette;
+//
+//    for (itr_lbx_palette = 0; itr_lbx_palette < 32; itr_lbx_palette++)
+//    {
+//        printf("[%u] %u (0x%02X)\n", itr_lbx_palette, lbx_palette[itr_lbx_palette], lbx_palette[itr_lbx_palette]);
+//    }
+//
+//    int itr_lbx_palette_number;
+//    char * export_palette_file_path_base;
+//
+//    for (itr_lbx_palette_number = 1; itr_lbx_palette_number <= 7; itr_lbx_palette_number++)
+//    {
+//        export_palette_file_path_base = malloc(MAX_PATH);
+//        strcpy(export_palette_file_path_base, "F:");
+//        strcat(export_palette_file_path_base, "\\");
+//        strcat(export_palette_file_path_base, "devel_data\\STU\\MoM131_LBX");
+//        strcat(export_palette_file_path_base, "\\");
+//        strcat(export_palette_file_path_base, "EXPORT");
+//        strcat(export_palette_file_path_base, "\\");
+//        strcat(export_palette_file_path_base, mom_palette_name[itr_lbx_palette_number]);
+//        printf("export_palette_file_path_base: %s\n", export_palette_file_path_base);
+//        printf("Palette: %d %s\n", itr_lbx_palette_number, mom_palette_name[itr_lbx_palette_number]);
+//        liblbx_export_palette(g_palette_file_path, itr_lbx_palette_number, export_palette_file_path_base);
+//    }
+//
+//
+//}
 
 void test()
 {
@@ -489,7 +501,9 @@ int main()
 
     // test_load_lbx_palette();
 
-    test_export_MAIN000_FF0_BMP();
+    // 2021-10-04 10:54
+    // Commenting out everything that should have been in Graphics/FLIC/BMP/Palette/Font
+    // test_export_MAIN000_FF0_BMP();
 
 
     printf("\n");

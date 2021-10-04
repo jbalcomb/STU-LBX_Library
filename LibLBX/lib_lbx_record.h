@@ -8,10 +8,10 @@
 extern "C" {
 #endif /* __cplusplus */
 
-char * get_record_data(LBX_DATA * lbx, int entry_number);
-int get_record_size(LBX_DATA * lbx, int entry_number);
-unsigned long int get_record_checksum_crc32(LBX_DATA * lbx, int entry_number);
-char * get_record_file_name_base(LBX_DATA * lbx, int entry_number);
+char * get_record_data(LBX_DATA * lbx, unsigned int entry_number);
+unsigned int get_record_size(LBX_DATA * lbx, unsigned int entry_number);
+unsigned long int get_record_checksum_crc32(LBX_DATA * lbx, unsigned int entry_number);
+char * get_record_file_name_base(LBX_DATA * lbx, unsigned int entry_number);
 
 #ifdef __cplusplus
 }
