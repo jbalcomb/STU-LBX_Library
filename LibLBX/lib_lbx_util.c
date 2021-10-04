@@ -1,13 +1,14 @@
-#include <stdio.h>          /* fclose(), fopen(), fread(), fwrite(), printf(); FILE */
+#include <stdio.h>          /* fclose(), fgetc(), fopen(), fread(), fwrite(), printf(); FILE */
 #include <stdlib.h>         /* itoa(), splitpath(); EXIT_FAILURE, EXIT_SUCCESS; */
 #include <string.h>         /* strcat(), strcpy(), strncpy(), strlen(); */
 
 #include <sys/stat.h>       /* fstat(); stat; */
 #include <time.h>           /* ctime(), localtime(), strftime(), time(); time_t, struct tm; */
+#include <stdint.h>
 
 #include "lib_lbx_util.h"
 
-uint16_t lbx_read_2byte_le(FILE * file_stream)
+uint16_t liblbx_read_2byte_le(FILE * file_stream)
 {
     uint16_t result;
     result  = fgetc(file_stream);
@@ -15,7 +16,7 @@ uint16_t lbx_read_2byte_le(FILE * file_stream)
     return result;
 }
 
-uint32_t lbx_read_4byte_le(FILE * file_stream)
+uint32_t liblbx_read_4byte_le(FILE * file_stream)
 {
     uint32_t result;
     result  = fgetc(file_stream);
@@ -25,62 +26,182 @@ uint32_t lbx_read_4byte_le(FILE * file_stream)
     return result;
 }
 
-void lbx_file_path_and_file_name(LBX_DATA * lbx)
+void * liblbx_malloc(lbx_size memory_allocation_size_estimate)
 {
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: BEGIN: lbx_file_path_and_file_name()\n");
+    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: BEGIN: liblbx_malloc()\n");
+
+    /*
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: BEGIN: lbx->record->entry[%d].headers->flic->lbx_flic_frames->frame_raw[%d].frame_raw = malloc(%u);\n", itr_entry_index, itr_frame_count, tmp_frame_size);
+    lbx->record->entry[itr_entry_index].headers->flic->lbx_flic_frames->frame_raw[itr_frame_count].frame_raw = malloc(tmp_frame_size);
+    if (lbx->record->entry[itr_entry_index].headers->flic->lbx_flic_frames->frame_raw[itr_frame_count].frame_raw == NULL)
+    {
+        printf("FAILURE: lbx->record->entry[%d].headers->flic->lbx_flic_frames->frame_raw[%d].frame_raw = malloc(%u);\n", itr_entry_index, itr_frame_count, tmp_frame_size);
+        exit(EXIT_FAILURE);
+    }
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: END: lbx->record->entry[%d].headers->flic->lbx_flic_frames->frame_raw[%d].frame_raw = malloc(%u);\n", itr_entry_index, itr_frame_count, tmp_frame_size);
+    */
+
+    void * memory_space;
+
+    memory_space = malloc(memory_allocation_size_estimate);
+
+    if (memory_space == NULL)
+    {
+        printf("FAILURE: memory_space = malloc(%u);\n", memory_allocation_size_estimate);
+        exit(EXIT_FAILURE);
+    }
+
+    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: BEGIN: liblbx_malloc()\n");
+
+    return memory_space;
+}
+
+/* char * convert_number_to_string_with_padding(int number, int length) */
+char * liblbx_convert_entry_index_to_string(int entry_number, int string_length)
+{
+    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: BEGIN: liblbx_convert_entry_index_to_string()\n");
+
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: entry_number: %d\n", entry_number);
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: string_length: %d\n", string_length);
+
+    int tmp_len_entry_number_string;
+
+    tmp_len_entry_number_string = snprintf( NULL, 0, "%d", entry_number);
+
+    int tmp_len_entry_number_string_padding;
+
+    /*
+    if (tmp_len_entry_number_string == 1) {
+        tmp_len_entry_number_string_padding = 2;
+    }
+    else if (tmp_len_entry_number_string == 2) {
+        tmp_len_entry_number_string_padding = 1;
+    }
+    else {
+        tmp_len_entry_number_string_padding = 0;
+    }
+    */
+    tmp_len_entry_number_string_padding = string_length - tmp_len_entry_number_string;
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: tmp_len_entry_number_string_padding: %d\n", tmp_len_entry_number_string_padding);
+
+    char * tmp_entry_number_string;
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: BEGIN: tmp_entry_number_string = malloc(tmp_len_entry_number_string + 1);\n");
+    tmp_entry_number_string = malloc(tmp_len_entry_number_string + 1);
+    if (tmp_entry_number_string == NULL)
+    {
+        printf("FAILURE: tmp_entry_number_string = malloc(%u);\n", tmp_len_entry_number_string + 1);
+        exit(EXIT_FAILURE);
+    }
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: END: tmp_entry_number_string = malloc(tmp_len_entry_number_string + 1);\n");
+
+
+    snprintf(tmp_entry_number_string, tmp_len_entry_number_string + 1, "%d", entry_number);
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: tmp_entry_number_string: %s\n", tmp_entry_number_string);
+
+    /*
+    char * tmp_entry_number_string_padding;
+    tmp_entry_number_string_padding = malloc(tmp_len_entry_number_string_padding + 1);
+
+    if (tmp_len_entry_number_string == 1) {
+        strcpy(tmp_entry_number_string_padding, "00");
+        if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: tmp_entry_number_string_padding: %s\n", tmp_entry_number_string_padding);
+    }
+    if (tmp_len_entry_number_string == 2) {
+        strcpy(tmp_entry_number_string_padding, "0");
+        if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: tmp_entry_number_string_padding: %s\n", tmp_entry_number_string_padding);
+    }
+    */
+    /* TODO(jbalcomb): refactor to sensibly accommodate `pad len == 0` */
+    char tmp_entry_number_string_padding[tmp_len_entry_number_string_padding + 1];
+    strncpy(tmp_entry_number_string_padding, "", sizeof(tmp_entry_number_string_padding));  /* this fixed the uninitialized but when pad len was 0 */
+    int itr_tmp_len_entry_number_string_padding;
+    char *ptr_tmp_entry_number_string_padding = tmp_entry_number_string_padding; /* `char *ptr = arr` ~= `char *ptr = &arr[0]` */
+    for (itr_tmp_len_entry_number_string_padding = 0; itr_tmp_len_entry_number_string_padding < tmp_len_entry_number_string_padding; itr_tmp_len_entry_number_string_padding++)
+    {
+        if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: tmp_entry_number_string_padding: %s\n", tmp_entry_number_string_padding);
+        strcpy(&ptr_tmp_entry_number_string_padding[itr_tmp_len_entry_number_string_padding], "0");
+    }
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: tmp_entry_number_string_padding: %s\n", tmp_entry_number_string_padding);
+
+    char * entry_number_string;
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: BEGIN: entry_number_string = malloc(sizeof(char *) * (strlen(tmp_entry_number_string_padding) + strlen(tmp_entry_number_string) + 1));\n");
+    entry_number_string = malloc(sizeof(char *) * (strlen(tmp_entry_number_string_padding) + strlen(tmp_entry_number_string) + 1));
+    if (entry_number_string == NULL)
+    {
+        printf("FAILURE: entry_number_string = malloc(%u);\n", sizeof(char *) * (strlen(tmp_entry_number_string_padding) + strlen(tmp_entry_number_string) + 1));
+        exit(EXIT_FAILURE);
+    }
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: END: entry_number_string = malloc(sizeof(char *) * (strlen(tmp_entry_number_string_padding) + strlen(tmp_entry_number_string) + 1));\n");
+
+    strcpy(entry_number_string, tmp_entry_number_string_padding);
+    strcat(entry_number_string, tmp_entry_number_string);
+    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: entry_number_string: %s\n", entry_number_string);
+
+    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: END: liblbx_convert_entry_index_to_string()\n");
+    return entry_number_string;
+}
+
+void liblbx_directory_path_and_file_name(LBX_DATA * lbx)
+{
+    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: BEGIN: liblbx_directory_path_and_file_name()\n");
+
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: lbx->file->file_path: %s\n", lbx->file->file_path);
 
     char tmp_windows_splitpath_drive[MAX_DRIVE];
     char tmp_windows_splitpath_dir[MAX_DIR];
     char tmp_windows_splitpath_fname[MAX_FNAME];
     char tmp_windows_splitpath_ext[MAX_EXT];
-    char * tmp_file_path;
+    char * tmp_directory_path;
     char * tmp_file_name;
 
-    _splitpath(lbx->meta->meta_file_path,
+    _splitpath(lbx->file->file_path,
                tmp_windows_splitpath_drive,
                tmp_windows_splitpath_dir,
                tmp_windows_splitpath_fname,
                tmp_windows_splitpath_ext);
 
-    tmp_file_path = malloc(sizeof(char) * (strlen(tmp_windows_splitpath_drive) + strlen(tmp_windows_splitpath_dir) + 1));
-    strcpy(tmp_file_path, tmp_windows_splitpath_drive);
-    strcat(tmp_file_path, tmp_windows_splitpath_dir);
+    tmp_directory_path = malloc(sizeof(char) * (strlen(tmp_windows_splitpath_drive) + strlen(tmp_windows_splitpath_dir) + 1));
+    strcpy(tmp_directory_path, tmp_windows_splitpath_drive);
+    strcat(tmp_directory_path, tmp_windows_splitpath_dir);
 
     tmp_file_name = malloc(sizeof(char) * (strlen(tmp_windows_splitpath_fname) + strlen(tmp_windows_splitpath_ext) + 1));
     strcpy(tmp_file_name, tmp_windows_splitpath_fname);
     strcat(tmp_file_name, tmp_windows_splitpath_ext);
 
-    lbx->meta->meta_file_path = tmp_file_path;
-    lbx->meta->meta_file_name = tmp_file_name;
+    lbx->file->directory_path = tmp_directory_path;
+    lbx->file->file_name = tmp_file_name;
 
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: END: lbx_file_path_and_file_name()\n");
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: lbx->file->directory_path: %s\n", lbx->file->directory_path);
+    if (LBX_DEBUG_STRUGGLE_MODE) printf("DEBUG: lbx->file->file_name: %s\n", lbx->file->file_name);
+
+    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: END: liblbx_directory_path_and_file_name()\n");
 }
 
 
-void lbx_file_name_base(LBX_DATA * lbx)
+void liblbx_file_name_base(LBX_DATA * lbx)
 {
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: BEGIN: lbx_file_name_base()\n");
+    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: BEGIN: liblbx_file_name_base()\n");
 
     int itr_file_name_in;
 
-    lbx->meta->meta_file_name_base = malloc(sizeof(char) * (strlen(lbx->meta->meta_file_name) + 1));
-    strcpy(lbx->meta->meta_file_name_base, lbx->meta->meta_file_name);
+    lbx->file->file_name_base = malloc(sizeof(char) * (strlen(lbx->file->file_name) + 1));
+    strcpy(lbx->file->file_name_base, lbx->file->file_name);
 
-    for (itr_file_name_in = 0; lbx->meta->meta_file_name_base[itr_file_name_in] != 0; itr_file_name_in++)
+    for (itr_file_name_in = 0; lbx->file->file_name_base[itr_file_name_in] != 0; itr_file_name_in++)
     {
-        if (lbx->meta->meta_file_name[itr_file_name_in] == '.')
+        if (lbx->file->file_name[itr_file_name_in] == '.')
         {
-            lbx->meta->meta_file_name_base[itr_file_name_in] = '\0';
-            lbx->meta->meta_file_name_base[itr_file_name_in + 1] = '\0';
+            lbx->file->file_name_base[itr_file_name_in] = '\0';
+            lbx->file->file_name_base[itr_file_name_in + 1] = '\0';
         }
     }
 
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: END: lbx_file_name_base()\n");
+    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: END: liblbx_file_name_base()\n");
 }
 
-size_t lbx_file_size_via_seek(FILE * file_stream)
+size_t liblbx_file_size_via_seek(FILE * file_stream)
 {
-    if (LBX_DEBUG_MODE) printf("DEBUG: BEGIN: lbx_file_size_via_seek()\n");
+    if (LBX_DEBUG_MODE) printf("DEBUG: BEGIN: liblbx_file_size_via_seek()\n");
 
     size_t tmp_pos;
     size_t file_size_seek;
@@ -92,13 +213,13 @@ size_t lbx_file_size_via_seek(FILE * file_stream)
 
     fseek(file_stream, tmp_pos, SEEK_SET);
 
-    if (LBX_DEBUG_MODE) printf("DEBUG: END: lbx_file_size_via_seek()\n");
+    if (LBX_DEBUG_MODE) printf("DEBUG: END: liblbx_file_size_via_seek()\n");
     return file_size_seek;
 }
 
-void lbx_earliest_timestamp_via_stat(LBX_DATA * lbx)
+void liblbx_earliest_timestamp_via_stat(LBX_DATA * lbx)
 {
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: BEGIN: lbx_earliest_timestamp_via_stat()\n");
+    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: BEGIN: liblbx_earliest_timestamp_via_stat()\n");
 
     time_t tmp_st_atime;        /* time of last access */
     time_t tmp_st_mtime;        /* time of last modification */
@@ -107,7 +228,7 @@ void lbx_earliest_timestamp_via_stat(LBX_DATA * lbx)
 
     struct stat file_stat_buf;
 
-    fstat(fileno(lbx->file_stream), &file_stat_buf);
+    fstat(fileno(lbx->file->file_stream), &file_stat_buf);
 
     if (LBX_DEBUG_STRUGGLE_MODE) printf(" File access time %s", ctime(&file_stat_buf.st_atime));
     if (LBX_DEBUG_STRUGGLE_MODE) printf(" File modify time %s", ctime(&file_stat_buf.st_mtime));
@@ -142,7 +263,7 @@ void lbx_earliest_timestamp_via_stat(LBX_DATA * lbx)
     char iso8601_buf[sizeof "0000-00-00T00:00:00Z"];
     strftime(iso8601_buf, sizeof iso8601_buf, "%FT%TZ", gmtime(&lbx->meta->earliest_timestamp));
 
-    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: END: lbx_earliest_timestamp_via_stat()\n");
+    if (LBX_DEBUG_VERBOSE_MODE) printf("DEBUG: END: liblbx_earliest_timestamp_via_stat()\n");
 }
 
 /*
@@ -224,7 +345,7 @@ int main( int argc, const char *argv[] )
  *     - file errors
 \*----------------------------------------------------------------------------*/
 
-int lbx_compute_crc32_char_buffer(char * char_buffer_in, size_t char_buffer_length, unsigned long int * crc32_out)
+int liblbx_compute_crc32_char_buffer(char * char_buffer_in, size_t char_buffer_length, unsigned long int * crc32_out)
 {
 #   define CRC_BUFFER_SIZE  8192
     unsigned char buf[CRC_BUFFER_SIZE];
@@ -254,7 +375,7 @@ int lbx_compute_crc32_char_buffer(char * char_buffer_in, size_t char_buffer_leng
 
         memcpy(buf, char_buffer_in + pos_char_buffer_in, sizeof(char) * chunk_size);
 
-        *crc32_out = lbx_compute_crc32(*crc32_out, buf, chunk_size);
+        *crc32_out = liblbx_compute_crc32(*crc32_out, buf, chunk_size);
 
         itr_chunk_count = itr_chunk_count + 1;
         pos_char_buffer_in = pos_char_buffer_in + chunk_size;
@@ -263,7 +384,7 @@ int lbx_compute_crc32_char_buffer(char * char_buffer_in, size_t char_buffer_leng
     return(0);
 }
 
-int lbx_compute_crc32_file(FILE * file_stream, unsigned long int * crc32_out)
+int liblbx_compute_crc32_file(FILE * file_stream, unsigned long int * crc32_out)
 {
 #   define CRC_BUFFER_SIZE  8192
     unsigned char buf[CRC_BUFFER_SIZE];
@@ -287,7 +408,7 @@ int lbx_compute_crc32_file(FILE * file_stream, unsigned long int * crc32_out)
             }
             break;
         }
-        *crc32_out = lbx_compute_crc32(*crc32_out, buf, bufLen);
+        *crc32_out = liblbx_compute_crc32(*crc32_out, buf, bufLen);
     }
 
     fseek(file_stream, tmp_pos, SEEK_SET);
@@ -316,8 +437,8 @@ int lbx_compute_crc32_file(FILE * file_stream, unsigned long int * crc32_out)
  *  ERRORS:
  *     (no errors are possible)
 \*----------------------------------------------------------------------------*/
-/* static unsigned long lbx_compute_crc32(unsigned long crc32_in, const void * buf, size_t bufLen) */
-unsigned long lbx_compute_crc32(unsigned long crc32_in, const void * buf, size_t bufLen)
+/* static unsigned long liblbx_compute_crc32(unsigned long crc32_in, const void * buf, size_t bufLen) */
+unsigned long liblbx_compute_crc32(unsigned long crc32_in, const void * buf, size_t bufLen)
 {
     static const unsigned long crcTable[256] = {
             0x00000000,0x77073096,0xEE0E612C,0x990951BA,0x076DC419,0x706AF48F,0xE963A535,
