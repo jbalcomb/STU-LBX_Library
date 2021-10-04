@@ -1,0 +1,303 @@
+MAIN.LBX
+File Size: 68,964
+Entry 1
+Entry Name: 
+Entry Description: 
+Record Type: LBX_RECORD_TYPE_FLIC
+Record Size: 4,096 bytes
+
+MAIN001.BIN
+File Size: 4,096 bytes
+
+
+Image Info Header:
+27 00            0 00  frame_width          (0027h, 39d)
+0C 00            2 02  frame_height         (000Ch, 12d)
+00 00            4 04  current_frame        (0000h, 0d)
+02 00            6 06  frame_count          (0002h, 2d)
+01 00            8 08  loop_frame           (0001h, 1d)
+00              10 0A  emm_handle           (00h, 0d)
+00              11 0B  emm_logical_page     (00h, 0d)
+00 00           12 0C  emm_data_offset      (0000h, 0d)
+00 00           14 0E  palette_info_offset  (0000h, 0d)
+01 00           16 10  unknown              (0001h, 1d)
+
+               -18-12-
+
+Image Custom Palette:
+N/A
+
+Image Data Offset Table:
+1E 00 00 00     18 12  Image Data Offset 0  (0000001Eh,   30d) ( 624- 30=594)
+70 02 00 00     22 16  Image Data Offset 1  (00000270h,  624d) (1216-624=592)
+C0 04 00 00     26 1A  Image Data Offset 2  (000004C0h, 1216d)
+
+               -30-1E-
+
+Frame Data:
+01                  Frame Type: {0x00, 0x01} (0x00 = Delta Frame, 0x01 = Byte-Run Frame) (AKA FLIC - Chunk Type)
+ 
+80                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+09                  Packet Byte Count (h, d)
+07                  Sequence Byte Count (h, d)
+00                  Delta Byte Count
+    E5 B0
+    B1
+    E2 B0
+    B1
+    B5 
+
+80                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+09 
+07 
+00 
+    B1 
+    E4 B4 
+    E3 B3 
+    B5 
+    36 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E (0Eh, 14d)
+0C 
+00 
+    B2 B4 36 36 B8 B7 B7 B7 B6 B6 B8 36 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B2 B4 36 36 36 B8 B7 B7 B6 B6 36 37 
+    
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B2 B5 36 36 36 36 B7 B7 B7 B6 36 37 
+    
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B1 B4 B8 01 01 01 01 01 B2 B6 36 37 
+
+80                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+09 
+07 
+00 
+    B0 
+    B3 
+    E6 01 
+    A3 
+    B8 
+    36 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B0 01 A3 B2 B3 B2 B3 B2 01 B0 B8 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B0 01 B0 B6 B6 B6 B8 B7 01 B0 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B0 01 B0 B6 01 A3 B6 01 B0 A3 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B1 01 A3 B7 01 01 01 01 A3 B6 B8 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B1 01 01 B3 01 01 01 01 01 A3 B8 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B2 B3 B3 A3 B0 B0 A3 B3 01 A3 36 37 
+
+80                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0A 
+08 
+00 
+B1 B4 E5 B6 B3 A3 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B2 B4 B7 B7 B6 01 01 01 A3 B7 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B2 B4 B7 B6 01 B0 B0 A3 01 A3 36 36 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B2 B4 B7 B6 01 A3 B4 01 A3 A3 B8 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B2 B4 B7 B6 01 01 01 01 01 B0 B8 36 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B1 B4 B7 B6 01 01 01 01 01 B0 B8 36 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B0 B4 B7 B6 A3 B0 A3 01 B0 A3 B8 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B0 B4 B7 B6 B6 01 A3 A3 A3 B6 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B1 B4 B7 B6 01 01 01 01 01 A3 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B1 B4 B7 B6 01 01 01 01 01 B0 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B0 B4 B6 B6 A3 01 B0 A3 A3 B0 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 00 B0 B3 B6 B6 01 01 01 01 01 B2 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B0 B3 B6 B6 A3 01 B0 B2 B2 B0 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B0 B3 B6 B6 01 01 01 01 01 B3 36 37 
+    
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B0 B3 B6 B6 A3 B2 B3 B3 01 B3 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B0 B3 B6 B6 B7 B7 B8 36 B3 B3 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B0 B4 B7 B7 B7 01 01 01 B3 36 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B1 B4 B8 B8 01 01 01 01 01 B3 36 37 
+
+00 0E 0C 00 B2 B4 36 36 01 B0 B3 01 01 B3 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B2 B4 36 36 01 B3 01 B3 01 B3 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B2 B4 36 36 01 01 B3 B3 01 B2 36 37 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B2 B4 36 36 B3 B3 B3 B7 A3 A3 B8 36 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B2 B4 36 36 36 B8 B7 B6 B6 B6 B8 36 
+
+00                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+0E 
+0C 
+00 
+    B2 B4 36 36 B8 B7 B7 B6 B6 B5 B8 36 
+
+80                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+09 
+07 
+00 
+    B1 
+    B7 
+    E5 36 
+    E2 B8 
+    36 
+
+80                  RLE Packet Operation Code: {0x00, 0x80, 0xFF}  (0x00 = Copy, 0x80 = Decode, 0xFF = Skip)
+07 
+05 
+00 
+B7 E6 37 E3 36 
+
+
+
+Frame Index 1:
+
+01                      Frame-Type
+
+80 04 02 00 EB 01 
+80 0A 08 00 01 A0 E4 B0 B1 E2 B0 B1 
+80 09 07 00 01 B1 E4 B4 E3 B3 B5 
+00 0E 0C 00 01 B2 B4 36 36 B8 B7 B7 B7 B6 B6 B8 
+00 0E 0C 00 01 B2 B4 36 36 36 B8 B7 B7 B6 B6 36 
+00 0E 0C 00 01 B2 B5 36 36 36 36 B7 B7 B7 B6 36 
+00 0E 0C 00 01 B1 B4 B8 01 01 01 01 01 B2 B6 36 
+80 09 07 00 01 B0 B3 E6 01 A3 B8 
+00 0E 0C 00 01 B0 01 A3 B2 B3 B2 B3 B2 01 B0 B8 
+00 0E 0C 00 01 B0 01 B0 B6 B6 B6 B8 B7 01 B0 36 
+00 0E 0C 00 01 B0 01 B0 B6 01 A3 B6 01 B0 A3 36 
+00 0E 0C 00 01 B1 01 A3 B7 01 01 01 01 A3 B6 B8 
+00 0E 0C 00 01 B1 01 01 B3 01 01 01 01 01 A3 B8 
+00 0E 0C 00 01 B2 B3 B3 A3 B0 B0 A3 B3 01 A3 36 
+80 0A 08 00 01 B1 B4 E5 B6 B3 A3 36 
+00 0E 0C 00 01 B2 B4 B7 B7 B6 01 01 01 A3 B7 36 
+00 0E 0C 00 01 B2 B4 B7 B6 01 B0 B0 A3 01 A3 36 
+00 0E 0C 00 01 B2 B4 B7 B6 01 A3 B4 01 A3 A3 B8 
+00 0E 0C 00 01 B2 B4 B7 B6 01 01 01 01 01 B0 B8 
+00 0E 0C 00 01 B1 B4 B7 B6 01 01 01 01 01 B0 B8 
+00 0E 0C 00 01 B0 B4 B7 B6 A3 B0 A3 01 B0 A3 B8 
+00 0E 0C 00 01 B0 B4 B7 B6 B6 01 A3 A3 A3 B6 36 
+00 0E 0C 00 01 B1 B4 B7 B6 01 01 01 01 01 A3 36 
+00 0E 0C 00 01 B1 B4 B7 B6 01 01 01 01 01 B0 36 
+00 0E 0C 00 01 B0 B4 B6 B6 A3 01 B0 A3 A3 B0 36 
+00 0E 0C 00 01 B0 B3 B6 B6 01 01 01 01 01 B2 36 
+00 0E 0C 00 01 B0 B3 B6 B6 A3 01 B0 B2 B2 B0 36 
+00 0E 0C 00 01 B0 B3 B6 B6 01 01 01 01 01 B3 36 
+00 0E 0C 00 01 B0 B3 B6 B6 A3 B2 B3 B3 01 B3 36 
+00 0E 0C 00 01 B0 B3 B6 B6 B7 B7 B8 36 B3 B3 36 
+00 0E 0C 00 01 B0 B4 B7 B7 B7 01 01 01 B3 36 36 
+00 0E 0C 00 01 B1 B4 B8 B8 01 01 01 01 01 B3 36 
+00 0E 0C 00 01 B2 B4 36 36 01 B0 B3 01 01 B3 36 
+00 0E 0C 00 01 B2 B4 36 36 01 B3 01 B3 01 B3 36 
+00 0E 0C 00 01 B2 B4 36 36 01 01 B3 B3 01 B2 36 
+00 0E 0C 00 01 B2 B4 36 36 B3 B3 B3 B7 A3 A3 B8 
+00 0E 0C 00 01 B2 B4 36 36 36 B8 B7 B6 B6 B6 B8 
+00 0E 0C 00 01 B2 B4 36 36 B8 B7 B7 B6 B6 B5 B8 
+80 09 07 00 01 B1 B7 E5 36 E2 B8

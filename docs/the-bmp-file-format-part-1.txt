@@ -1,0 +1,342 @@
+
+// https://www.drdobbs.com/architecture-and-design/the-bmp-file-format-part-1/184409517
+
+
+
+// Figure 1: The BITMAPFILEHEADER structure.
+
+typedef struct BITMAPFILEHEADER
+{
+   UINT16    type;
+   UINT32    size;
+   INT16     xHotspot;
+   INT16     yHotspot;
+   UINT32    offsetToBits;
+}  BITMAPFILEHEADER;
+
+// Figure 2: BITMAPARRAYHEADER structure.
+
+typedef struct BITMAPARRAYHEADER
+{
+   UINT16    type;
+   UINT32    size;
+   UINT32    next;
+   UINT16    screenWidth;
+   UINT16    screenHeight;
+} BITMAPARRAYHEADER;
+
+// Figure 3: BITMAPHEADER structure.
+
+typedef struct BITMAPHEADER
+{
+    UINT32 size;
+    INT32  width;
+    INT32  height;
+    UINT16 numBitPlanes;
+    UINT16 numBitsPerPlane;
+    UINT32 compressionScheme;
+    UINT32 sizeOfImageData;
+    UINT32 xResolution;
+    UINT32 yResolution;
+    UINT32 numColorsUsed;
+    UINT32 numImportantColors;
+    UINT16 resolutionUnits;
+    UINT16 padding;
+    UINT16 origin;
+    UINT16 halftoning;
+    UINT32 halftoningParam1;
+    UINT32 halftoningParam2;
+    UINT32 colorEncoding;
+    UINT32 identifier;
+} BITMAPHEADER;
+
+// Figure 4: RGB structure.
+
+typedef struct RGB
+{
+  UINT8 blue;
+  UINT8 green;
+  UINT8 red;
+} RGB;
+
+/*
+Table 1: Basic data types.
+
+Type     Description                                                                 
+INT8     Integer at least 8 bits wide
+INT16    Integer at least 16 bits wide
+INT32    Integer at least 32 bits wide
+UINT8    Unsigned INT8
+UINT16   Unsigned INT16
+UINT32   Unsigned INT32
+*/
+
+/*
+Table 2: Structures used in bitmap files.
+
+My Structure        Windows Structures     OS/2 Structures          
+                                                                    
+BITMAPFILEHEADER    BITMAPFILEHEADER       BITMAPFILEHEADER,        
+                                           BITMAPFILEHEADER2        
+BITMAPARRAYHEADER   (N/A)                  BITMAPARRAYFILEHEADER,   
+                                           BITMAPARRAYFILEHEADER2   
+BITMAPHEADER        BITMAPCOREINFOHEADER   BITMAPINFOHEADER         
+                    BITMAPINFOHEADER       BITMAPINFOHEADER2        
+RGB                 RGBTRIPLE, RGBQUAD     RGB, RGB2                
+*/
+
+/*
+Table 3: Valid BITMAPHEADER types.
+
+Value           Symbolic Name    Description         
+0x4D42 ('BM')   TYPE_BMP         Bitmap
+0x4349 ('IC')   TYPE_ICO         OS/2 Icon
+0x4943 ('CI')   TYPE_ICO_COLOR   OS/2 Color Icon
+0x5450 ('PT')   TYPE_PTR         OS/2 Pointer
+0x5043 ('CP')   TYPE_PTR_COLOR   OS/2 Color Pointer
+*/
+
+/*
+Table 4: Compression schemes.
+
+Value   Symbolic name           Description                                    
+0       COMPRESSION_NONE        No compression
+1       COMPRESSION_RLE_8       8-bit-per-pixel RLE compression
+2       COMPRESSION_RLE_4       4-bit-per-pixel RLE compression
+3       COMPRESSION_HUFFMAN1D   1-bit-per-pixel modified Huffman compression
+3       COMPRESSION_BITFIELDS   16- and 32-bit-per-pixel BITFIELDS encoding
+4       COMPRESSION_RLE_24      24-bit-per-pixel RLE compression
+*/
+
+/*
+Table 5: Halftoning algorithms.
+
+Value   Symbolic name                Description                                                        
+0       HALFTONING_NONE              No halftoning
+1       HALFTONING_ERROR_DIFFUSION   Error-diffusion halftoning
+2       HALFTONING_PANDA             Processing Algorithm for Noncoded Document Acquisition (PANDA)
+3       HALFTONING_SUPER_CIRCLE      Super-circle halftoning
+*/
+
+
+
+// Listing One
+
+/* These functions read and write our basic integer types from a little-endian
+ * file. The endian and word-size of the host machine will not affect this
+ * code. The only assumption made is that the C data type (char) is one byte
+ * long. This should be a safe assumption.
+ */
+
+#include <stdio.h>
+#include "bmptypes.h"
+#include "endian.h"
+
+/*****************************************************************************
+* Read functions.  All read functions take an open file pointer as the first
+* parameter and a pointer to data as the second parameter.  The return value
+* will be 0 on success, and EOF on failure.  If successful, the second
+* parameter will point to the data read.
+*/
+
+/* The INT8 and UINT8 types are stored as a single byte on disk.  The INT8
+ * type is a signed integer with range (-128..127).  The UINT8 type is an
+ * unsigned integer with range (0..255).
+ */
+int readINT8little(FILE *f, INT8 *i)
+{
+    int rc;
+    rc = fgetc(f);
+    if (rc == EOF)
+        return rc;
+    *i = (rc & 0xff);
+    return 0;
+}
+int readUINT8little(FILE *f, UINT8 *i)
+{
+    int  rc;
+    rc = fgetc(f);
+    if (rc == EOF)
+        return rc;
+    *i = (rc & 0xff);
+    return 0;
+}
+/* The INT16 and UINT16 types are stored as two bytes on disk.  The INT16 type
+ * is a signed integer with range (-32768..32767).  The UINT16 type is an
+ * unisgned integer with range (0..65535).
+ */
+int readINT16little(FILE *f, INT16 *i)
+{
+    int rc;
+    INT16 temp = 0;
+    
+    temp = (fgetc(f) & 0xff);
+    
+    rc = fgetc(f);
+    if (rc == EOF)
+        return rc;
+    temp |= ((rc & 0xff) << 8);
+    *i = temp;
+    return 0;
+}
+int readUINT16little(FILE *f, UINT16 *i)
+{
+    int rc;
+    UINT16 temp = 0;
+    
+    temp = (fgetc(f) & 0xff);
+    
+    rc = fgetc(f);
+    if (rc == EOF)
+        return rc;
+    temp |= ((rc & 0xff) << 8);
+    *i = temp;
+    return 0;
+}
+/* The INT32 and UINT32 types are stored as four bytes on disk.  The INT32
+ * type is a signed integer with range (-2147483648..2147483647).  The UINT32
+ * type is an unisgned integer with range (0..4294967295).
+ */
+int readINT32little(FILE *f, INT32 *i)
+{
+    int rc;
+    INT32 temp = 0;
+    
+    temp = ((long)fgetc(f) & 0xff);
+    temp |= (((long)fgetc(f) & 0xff) << 8);
+    temp |= (((long)fgetc(f) & 0xff) << 16);
+    
+    rc = fgetc(f);
+    if (rc == EOF)
+        return rc;
+    temp |= (((long)rc & 0xff) << 24);
+    *i = temp;
+    return 0;
+}
+int readUINT32little(FILE *f, UINT32 *i)
+{
+    int rc;
+    UINT32 temp = 0;
+    
+    temp = ((long)fgetc(f) & 0xff);
+    temp |= (((long)fgetc(f) & 0xff) << 8);
+    temp |= (((long)fgetc(f) & 0xff) << 16);
+    
+    rc = fgetc(f);
+    if (rc == EOF)
+        return rc;
+    temp |= (((long)rc & 0xff) << 24);
+    *i = temp;
+    return 0;
+}
+/*****************************************************************************
+* Write functions.  All write functions take an open file pointer as the first
+* parameter and a data as the second parameter.  The return value will be 0 on
+* success, and EOF on failure.  If successful, the second parameter will have
+* been written to the open file.
+*/
+int writeINT8little(FILE *f, INT8 i)
+{
+    return fputc(i, f);
+}
+int writeUINT8little(FILE *f, UINT8 i)
+{
+    return fputc(i, f);
+}
+int writeINT16little(FILE *f, INT16 i)
+{
+    int rc;
+    rc = fputc((i & 0xff), f);
+    if (rc == EOF)
+        return rc;
+    return fputc(((i >> 8) & 0xff), f);
+}
+int writeUINT16little(FILE *f, UINT16 i)
+{
+    int rc;
+    rc = fputc((i & 0xff), f);
+    if (rc == EOF)
+       return rc;
+    return fputc(((i >> 8) & 0xff), f);
+}
+int writeINT32little(FILE *f, INT32 i)
+{
+    int rc;
+    rc = fputc((i & 0xff), f);
+    if (rc == EOF)
+       return rc;
+    rc = fputc(((i >> 8) & 0xff), f);
+    if (rc == EOF)
+       return rc;
+    rc = fputc(((i >> 16) & 0xff), f);
+    if (rc == EOF)
+       return rc;
+    return fputc(((i >> 24) & 0xff), f);
+}
+int writeUINT32little(FILE *f, UINT32 i)
+{
+    int rc;
+    rc = fputc((i & 0xff), f);
+    if (rc == EOF)
+       return rc;
+    rc = fputc(((i >> 8) & 0xff), f);
+    if (rc == EOF)
+       return rc;
+    rc = fputc(((i >> 16) & 0xff), f);
+    if (rc == EOF)
+       return rc;
+    return fputc(((i >> 24) & 0xff), f);
+}
+/* Formatting information for emacs in c-mode
+ * Local Variables:
+ * c-indent-level:4
+ * c-continued-statement-offset:4
+ * c-brace-offset:-4
+ * c-brace-imaginary-offset:0
+ * c-argdecl-indent:4
+ * c-label-offset:-4
+ * End:
+ */
+
+
+// Listing Two
+
+/* This is the header for endian.c - functions to read/write our
+ * INT8, INT16 and INT32 types from/to a little-endian file.
+ */
+
+#ifndef __ENDIAN_H_INCLUDED__
+#define __ENDIAN_H_INCLUDED__
+ 
+/* Read the basic types as little-endian values.  The return value will be
+ * zero if successful, EOF, otherwise.
+ */
+int readINT8little(FILE *f, INT8 *i);
+int readINT16little(FILE *f, INT16 *i);
+int readINT32little(FILE *f, INT32 *i);
+int readUINT8little(FILE *f, UINT8 *i);
+int readUINT16little(FILE *f, UINT16 *i);
+int readUINT32little(FILE *f, UINT32 *i);
+
+/* Write the basic types as little-endian values.  The return value will be
+ * zero if successful, EOF otherwise.
+ */
+int writeINT8little(FILE *f, INT8 i);
+int writeINT16little(FILE *f, INT16 i);
+int writeINT32little(FILE *f, INT32 i);
+int writeUINT8little(FILE *f, UINT8 i);
+int writeUINT16little(FILE *f, UINT16 i);
+int writeUINT32little(FILE *f, UINT32 i);
+
+#endif  /* __ENDIAN_H_INCLUDED__ */
+
+/* Formatting information for emacs in c-mode
+ * Local Variables:
+ * c-indent-level:4
+ * c-continued-statement-offset:4
+ * c-brace-offset:-4
+ * c-brace-imaginary-offset:0
+ * c-argdecl-indent:4
+ * c-label-offset:-4
+ * End:
+ */

@@ -16,7 +16,6 @@ void display_lbx_meta_data(LBX_DATA * lbx);
 void display_lbx_file_meta_data(LBX_DATA * lbx);
 void display_lbx_record_meta_data(LBX_DATA * lbx);
 
-
 #ifdef __cplusplus
 }
 #endif

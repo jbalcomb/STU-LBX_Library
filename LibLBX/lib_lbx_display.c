@@ -3,7 +3,7 @@
 #include <string.h>         /* memcpy(), strncpy(), strlen(); */
 
 #include "lib_lbx_display.h"
-
+#include "lib_lbx.h"
 
 
 void lbx_display_header(LBX_DATA * lbx_data)
@@ -229,7 +229,7 @@ void display_lbx_record_meta_data(LBX_DATA * lbx)
 
     for (itr_entry_count = 0; itr_entry_count < tmp_entry_count; itr_entry_count++)
     {
-        if (lbx->meta->records->entry[itr_entry_count].meta_type == LBX_RECORD_TYPE_IMAGES)
+        if (lbx->meta->records->entry[itr_entry_count].meta_type == LBX_RECORD_TYPE_FLIC)
         {
             strcpy(sub_record_attributes, "Height, Width");
         }

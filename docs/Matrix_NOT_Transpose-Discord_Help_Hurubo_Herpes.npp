@@ -1,0 +1,627 @@
+Let's consider the matrix: 
+
+0 3 6 9  12
+1 4 7 10 13
+2 5 8 11 14
+
+And we want to transform it into 
+0 1 2 3 4
+5 6 7 8 9
+10 11 12 13 14
+
+Let's start from the zero.
+Zero just goes to zero.
+
+But then what about the one?
+Well, if we vectorize this matrix, we find out that 1 is at index 5.
+And in the redirected matrix, it's at index 1.
+
+But what is 1? It's nothing but 5 % 4.
+
+And then two is at index 10.
+Whereas in the redirected matrix, it's at index 2.
+But 2 is nothing but 10 % 4.
+
+Moving on to the three.
+In the original matrix, it's at index 1, and in the redirected matrix at index 3.
+
+1 % 4 is just 1.
+So we need to adjust this method.
+
+Let's try adding a value of the column index times two.
+So in the case of three, it would be 1 % 4 + 1 * 2.
+Which is indeed 3.
+Works for 4 and 5.
+
+Let's try the six.
+In the original, it's at index 2, and in the redirected matrix at index 6.
+2 % 4 + 2 * 2 = 2 + 4 = 6.
+Seems to work.
+
+ 0 = 0
+ 1 =  5 % 4
+ 2 = 10 % 4
+
+ 3 = 1 % 4 + 1 * 2
+ 4 = 2 % 4 + 1 * 2
+ 5 = 3 % 4 + 1 * 2
+ 
+ 6 = 2 % 4 + 2 * 2
+ 7 = 2 % 4 + 2 * 2
+ 8 = 2 % 4 + 2 * 2
+
+ 9 = 2 % 4 + 2 * 2
+10 = 2 % 4 + 2 * 2
+11 = 2 % 4 + 2 * 2
+
+ = 2 % 4 + 2 * 2
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+
+4 = 2 % 4 + 1 * 2
+
+
+
+
+#include <stdio.h>
+
+int redirected_index(int idx_1d, int columns, int col_idx, int rows)
+{
+    return idx_1d % (columns - 1) + col_idx * (rows - 1);
+}
+
+int main(void)
+{
+    int source[3][5] = {
+        0, 3, 6,  9, 12,
+        1, 4, 7, 10, 13,
+        2, 5, 8, 11, 14
+    };
+    int destination[3][5];
+    int* dest_ptr = &destination[0][0];
+
+    for (int i = 0; i < 5; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            int const index = redirected_index(j * 5 + i, 5, i, 3);
+            dest_ptr[index] = source[j][i]; 
+        }
+    }
+
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 5; ++j)
+        {
+            printf("%d ", destination[i][j]);
+        }
+        puts("");
+    }
+}
+
+Compilation Results
+Status
+Finished with exit code: 0
+Program Output
+ 0  1  2  3  8 
+ 5 10 11 12 13 
+14  0  0  0  0 
+
+It seems to be wrong for 4.
+Why is that?
+4 is at index 6, but in the destination it's at index 4, 6 % 4 + 1 * 2 = 4.
+
+redirected_index(1 * 5 + 1, 5, 1, 3);
+6 % (5 - 1) + 1 * (3 - 1) =  6 % 4 + 1 * 2 = 2 + 2 = 4
+                            12 % 4 + 2 * 2 = 0 + 4 = 4
+
+
+0  5  10 1  6  11 2  7  12
+0  1  2  3  4  5  6  7  8
+
+
+
+
+
+
+
+#include <stdio.h>
+
+int redirected_index(int idx_1d, int columns, int row_idx, int rows)
+{
+    return (columns - 1) * ((idx_1d - row_idx) % (columns - 1)) + row_idx;
+}
+
+int main(void)
+{
+    int source[3][5] = {
+        0, 3, 6,  9, 12,
+        1, 4, 7, 10, 13,
+        2, 5, 8, 11, 14
+    };
+    int destination[3][5];
+    int* dest_ptr = &destination[0][0];
+
+    for (int i = 0; i < 5; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            int const index = redirected_index(j * 5 + i, 5, j, 3);
+            printf("redirected_index(%d) = %d\n", source[j][i], index);
+            dest_ptr[index] = source[j][i]; 
+        }
+    }
+
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 5; ++j)
+        {
+            printf("%d ", destination[i][j]);
+        }
+        puts("");
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+
+int redirected_index(int idx_1d, int columns, int row_idx, int rows)
+{
+    return (
+        ( 
+            ( 5 * idx_1d ) - ( row_idx * 4 ) 
+        ) 
+        %
+        (
+            ( ( ( 2 * columns ) + 1) + row_idx )
+        )
+    );
+}
+
+int main(void)
+{
+    int source[3][5] = {
+        0, 3, 6,  9, 12,
+        1, 4, 7, 10, 13,
+        2, 5, 8, 11, 14
+    };
+    int destination[3][5];
+    int* dest_ptr = &destination[0][0];
+
+    for (int i = 0; i < 5; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            int const index = redirected_index(j * 5 + i, 5, i, 3);
+            printf("redirected(%d) = %d\n", source[j][i], index);
+            dest_ptr[index] = source[j][i]; 
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+
+int redirected_index(int idx_1d, int columns, int row_idx, int rows)
+{
+    return ( 5 * idx_1d - row_idx * 4) % (2 * columns + 1) + row_idx;
+}
+
+int main(void)
+{
+    int source[3][5] = {
+        0, 3, 6,  9, 12,
+        1, 4, 7, 10, 13,
+        2, 5, 8, 11, 14
+    };
+    int destination[3][5];
+    int* src_ptr = &source[0][0];
+    int* dest_ptr = &destination[0][0];
+
+    for (int i = 0; i < 5; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            int const index = redirected_index(j + i * 5, 5, i, 3);
+            dest_ptr[index] = source[j][i]; 
+        }
+    }
+
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 5; ++j)
+            printf("%d ", destination[i][j]);
+        puts("");
+    }
+}
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+
+int redirected_index(int idx_1d, int columns, int col_idx, int rows)
+{
+    return (3 * idx_1d) % (15) + col_idx;
+}
+
+int main(void)
+{
+    int source[3][5] = {
+        0, 3, 6,  9, 12,
+        1, 4, 7, 10, 13,
+        2, 5, 8, 11, 14
+    };
+    int destination[3][5];
+    int* src_ptr = &source[0][0];
+    int* dest_ptr = &destination[0][0];
+
+    for (int i = 0; i < 5; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            int const index = redirected_index(j * 5 + i, 5, i, 3);
+            printf("r(%d) = %d\n", source[j][i], index);
+            dest_ptr[index] = source[j][i]; 
+        }
+    }
+/*
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 5; ++j)
+            printf("%d ", destination[i][j]);
+        puts("");
+    }
+*/
+}
+
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+
+int redirected_index(int idx_1d, int columns, int col_idx, int rows)
+{
+    return (3*idx_1d) % (15) + col_idx;
+}
+
+int main(void)
+{
+    int source[3][5] = {
+        0, 3, 6,  9, 12,
+        1, 4, 7, 10, 13,
+        2, 5, 8, 11, 14
+    };
+    int destination[3][5];
+    int* src_ptr = &source[0][0];
+    int* dest_ptr = &destination[0][0];
+
+    for (int i = 0; i < 5; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            int const index = redirected_index(j * 5 + i, 5, i, 3);
+            printf("r(%d) = %d\n", source[j][i], index);
+            dest_ptr[index] = source[j][i]; 
+        }
+    }
+/*
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 5; ++j)
+            printf("%d ", destination[i][j]);
+        puts("");
+    }
+*/
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+
+int redirected_index(int idx_1d, int columns, int col_idx, int rows)
+{
+    return (3 * idx_1d) % (15) + col_idx;
+}
+
+int main(void)
+{
+    int source[3][5] = {
+        0, 3, 6,  9, 12,
+        1, 4, 7, 10, 13,
+        2, 5, 8, 11, 14
+    };
+    int destination[3][5];
+    int* src_ptr = &source[0][0];
+    int* dest_ptr = &destination[0][0];
+
+    for (int i = 0; i < 5; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            int const index = redirected_index(j * 5 + i, 5, j, 3);
+            printf("r(%d) = %d\n", source[j][i], index);
+            dest_ptr[index] = source[j][i]; 
+        }
+    }
+
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 5; ++j)
+            printf("%d ", destination[i][j]);
+        puts("");
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+
+int redirected_index(int row, int col, int rows_count, int cols_count)
+{
+    return (rows_count * (row * cols_count + col)) % (rows_count * cols_count) + row;
+}
+
+int main(void)
+{
+    int source[3][5] = {
+        0, 3, 6,  9, 12,
+        1, 4, 7, 10, 13,
+        2, 5, 8, 11, 14
+    };
+    int destination[3][5];
+    int* src_ptr = &source[0][0];
+    int* dest_ptr = &destination[0][0];
+
+    for (int i = 0; i < 5; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            int const index = redirected_index(j, i, 3, 5);
+            dest_ptr[index] = source[j][i]; 
+        }
+    }
+
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 5; ++j)
+            printf("%d ", destination[i][j]);
+        puts("");
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Hurubo, final, working?
+
+#include <stdio.h>
+
+size_t array_offset(size_t i, size_t j, size_t stride)
+{
+    return i * stride + j;
+}
+
+int redirected_index(int row, int col, int rows_count, int cols_count)
+{
+    return (rows_count * array_offset(row, col, cols_count)) % (rows_count * cols_count) + row;
+}
+
+int main(void)
+{
+    int source[3][5] = {
+        0, 3, 6,  9, 12,
+        1, 4, 7, 10, 13,
+        2, 5, 8, 11, 14
+    };
+    int destination[3][5];
+    int* src_ptr = &source[0][0];
+    int* dest_ptr = &destination[0][0];
+
+    for (int i = 0; i < 5; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            int const index = redirected_index(j, i, 3, 5);
+            dest_ptr[index] = source[j][i]; 
+        }
+    }
+
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 5; ++j)
+            printf("%d ", destination[i][j]);
+        puts("");
+    }
+}
+
+
+HerpesDepes quick interjection submission
+
+int[] ApparentlyWeAreNotActuallyTransposingButDoingSomethingElse(int width, int height, int[] source)
+{
+  int result[] = new int[width * height];
+  for (int i = 0; i < width * height; i++)
+  {
+   int x = i / height;
+   int y = i % height;
+   int j = x + y * width;
+   result[j] = source[i];
+  }
+  return result;
+}
+
+
+Hurubo's response to HerpesDepes quick interjection submission
+
+static int[,] ApparentlyWeAreNotActuallyTransposingButDoingSomethingElse(int width, int height, int[,] source)
+{
+    int[,] result = new int[width, height];
+
+    for (int x = 0; x < width; x++)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            int i = y + x * height;
+            int newX = x % width;
+            int newY = y / height;
+            result[newX, newY] = source[x, y];
+        }
+    }
+    return result;
+}
+
+
+void redirection(int* destination, int* source, int width, int height)
+{
+    for (int i = 0; i < width * height; ++i)
+    {
+        int const x = i / height;
+        int const y = i % height;
+        int const j = x + y * width;
+        destination[j] = source[i];
+    }
+}
+
+void* launder(void* p)
+{
+    return p;
+}
+
+int main(void)
+{
+    #define ROWS 3
+    #define COLS 6
+    int source[ROWS][COLS] = {
+        0, 3, 6,  9, 12, 15,
+        1, 4, 7, 10, 13, 16,
+        2, 5, 8, 11, 14, 17
+    };
+    int destination[ROWS][COLS];
+
+    redirection(launder(destination), launder(source), ROWS, COLS);
+
+    for (int i = 0; i < ROWS; ++i)
+    {
+        for (int j = 0; j < COLS; ++j)
+            printf("%d ", destination[i][j]);
+        puts("");
+    }
+}
+
+
+
+So in FLIC, this would look like:
+  1 2 3 4 5 6 7 8
+1 a b c d e f g h
+2 a b c d e f g h
+3 a b c d e f g h
+4 a b c d e f g h
+5 a b c d e f g h
+
+I put in the row indices.
+
+
+In BMP, this would look like:
+  1 2 3 4 5
+1 h h h h h
+2 g g g g g
+3 f f f f f
+4 e e e e e
+5 d d d d d
+6 c c c c c
+7 b b b b b
+8 a a a a a
+
+If you take FLIC and start reading from the top-left downwards.
+And take BMP and read from the bottom-left rightwards.
+Notice you'll read "a a a a a" in both cases.
+As long as they both read the same things, the image displayed should be the same.
+
+JimBalcomb — Today at 8:05 PM
+That makes perfectly good sense and I think I almost get it.
+It seems like I have been hung up on / fixated on picturing the shape of the array in the same orientation as the image?
+
+Hurubon — Today at 8:06 PM
+Yes, when neither format actually does that.
+BMP flips it upside down.
+FLIC mirrors it across the main diagonal.

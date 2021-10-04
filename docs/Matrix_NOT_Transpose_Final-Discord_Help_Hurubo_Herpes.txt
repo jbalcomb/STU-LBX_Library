@@ -1,0 +1,117 @@
+
+Hurubo, final, working?
+
+#include <stdio.h>
+
+size_t array_offset(size_t i, size_t j, size_t stride)
+{
+    return i * stride + j;
+}
+
+int redirected_index(int row, int col, int rows_count, int cols_count)
+{
+    return (rows_count * array_offset(row, col, cols_count)) % (rows_count * cols_count) + row;
+}
+
+int main(void)
+{
+    int source[3][5] = {
+        0, 3, 6,  9, 12,
+        1, 4, 7, 10, 13,
+        2, 5, 8, 11, 14
+    };
+    int destination[3][5];
+    int* src_ptr = &source[0][0];
+    int* dest_ptr = &destination[0][0];
+
+    for (int i = 0; i < 5; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            int const index = redirected_index(j, i, 3, 5);
+            dest_ptr[index] = source[j][i]; 
+        }
+    }
+
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 5; ++j)
+            printf("%d ", destination[i][j]);
+        puts("");
+    }
+}
+
+
+HerpesDepes quick interjection submission
+
+int[] ApparentlyWeAreNotActuallyTransposingButDoingSomethingElse(int width, int height, int[] source)
+{
+  int result[] = new int[width * height];
+  for (int i = 0; i < width * height; i++)
+  {
+   int x = i / height;
+   int y = i % height;
+   int j = x + y * width;
+   result[j] = source[i];
+  }
+  return result;
+}
+
+
+Hurubo's response to HerpesDepes quick interjection submission
+
+static int[,] ApparentlyWeAreNotActuallyTransposingButDoingSomethingElse(int width, int height, int[,] source)
+{
+    int[,] result = new int[width, height];
+
+    for (int x = 0; x < width; x++)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            int i = y + x * height;
+            int newX = x % width;
+            int newY = y / height;
+            result[newX, newY] = source[x, y];
+        }
+    }
+    return result;
+}
+
+
+void redirection(int* destination, int* source, int width, int height)
+{
+    for (int i = 0; i < width * height; ++i)
+    {
+        int const x = i / height;
+        int const y = i % height;
+        int const j = x + y * width;
+        destination[j] = source[i];
+    }
+}
+
+void* launder(void* p)
+{
+    return p;
+}
+
+int main(void)
+{
+    #define ROWS 3
+    #define COLS 6
+    int source[ROWS][COLS] = {
+        0, 3, 6,  9, 12, 15,
+        1, 4, 7, 10, 13, 16,
+        2, 5, 8, 11, 14, 17
+    };
+    int destination[ROWS][COLS];
+
+    redirection(launder(destination), launder(source), ROWS, COLS);
+
+    for (int i = 0; i < ROWS; ++i)
+    {
+        for (int j = 0; j < COLS; ++j)
+            printf("%d ", destination[i][j]);
+        puts("");
+    }
+}
+

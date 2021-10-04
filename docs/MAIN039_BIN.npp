@@ -1,0 +1,85 @@
+MAIN.LBX
+File Size: 68,964
+Entry 39
+Entry Name: 
+Entry Description: 
+Record Type: LBX_RECORD_TYPE_FLIC
+Record Size: 274 bytes
+
+MAIN039.BIN
+File Size: 274 bytes
+
+
+Image Info Header:
+09 00            0 00  frame_width          (0009h, 9d)
+09 00            2 02  frame_height         (0009h, 9d)
+00 00            4 04  current_frame        (0000h, 0d)
+04 00            6 06  frame_count          (0004h, 4d)
+00 00            8 08  loop_frame           (0000h, 0d)
+00              10 0A  emm_handle           (00h, 0d)
+00              11 0B  emm_logical_page     (00h, 0d)
+00 00           12 0C  emm_data_offset      (0000h, 0d)
+00 00           14 0E  palette_info_offset  (0000h, 0d)
+01 00           16 10  unknown              (0001h, 1d)
+
+               -18-12-
+
+Image Custom Palette:
+N/A
+
+Image Data Offset Table:
+26 00 00 00     18 12  Image Data Offset 0  (00000026h, 38d) (76-38=38)
+4C 00 00 00     22 16  Image Data Offset 1  (0000004Ch, 76d) (128-76=52)
+80 00 00 00     26 1A  Image Data Offset 2  (00000080h, 128d) (222-128=94)
+DE 00 00 00     30 1E  Image Data Offset 3  (000000DEh, 222d) (274-222=52)
+12 01 00 00     34 22  Image Data Offset 4  (00000112h, 274d)
+
+               -38-26-
+
+Frame Data:
+01                  Frame Type: {0x00, 0x01} (0x00 = Delta Frame, 0x01 = Byte-Run Frame) (AKA FLIC - Chunk Type)
+
+FF 
+FF 
+00 03 01 04 B1 00 05 03 03 B5 A1 B5 00 07 05 02 B1 A1 0F A1 B1 00 05 03 03 B5 A1 B5 00 03 01 04 B1 FF FF 
+
+
+Frame Data:
+01 
+
+FF 
+00 03 01 03 B4 00 04 02 03 A1 B6 00 07 05 03 B1 A0 B1 A1 B4 00 07 05 02 B6 A0 0F A0 B6 00 07 05 01 B4 A1 B1 A0 B1 00 04 02 04 B6 A1 00 03 01 05 B4 FF 
+
+
+Frame Data:
+01 
+
+00 06 01 00 B6 01 07 B6 00 0B 02 01 B0 B6 01 01 B1 02 01 B6 B0 00 09 07 01 B6 A1 B3 A1 B3 A1 B6 00 07 05 02 B3 A0 A0 A0 B3 00 09 07 01 B1 A1 A0 0F A0 A1 B1 00 07 05 02 B3 A0 A0 A0 B3 00 09 07 01 B6 A1 B3 A1 B3 A1 B6 00 0B 02 01 B0 B6 01 01 B1 02 01 B6 B0 00 06 01 00 B6 01 07 B6 
+
+
+Frame Data:
+01 
+
+FF 
+00 
+03 
+01 05 B4 
+00 
+04 
+02 04 B6 A1 
+00 
+07 
+05 01 B4 A1 B1 A0 B1 
+00 
+07 
+05 02 B6 A0 0F A0 B6 
+00 
+07 
+05 03 B1 A0 B1 A1 B4 
+00 
+04 
+02 03 A1 B6 
+00 
+03 
+01 03 B4 
+FF

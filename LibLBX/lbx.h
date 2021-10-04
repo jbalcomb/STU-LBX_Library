@@ -3,7 +3,7 @@
 
 #include "lbx_defs.h"
 #include "lbx_types.h"
-//#include "lbx_record_type_flic.h"
+#include "lbx_record_type_flic.h"
 
 
 struct s_LBX_HEADER_OFFSET_TABLE_ENTRY{
